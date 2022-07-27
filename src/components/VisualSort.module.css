@@ -1,0 +1,31 @@
+.buttonContainer{
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn{
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;  
+    margin-top: 50px;
+}
+.btn:disabled{
+    cursor: not-allowed;
+}
+.primaryBtn{
+    background-color: #369;
+    color: white;
+}
+
+.sortBtn{
+    margin-left: 20px;
+}
+.sortBtn:disabled{
+    background-color: #589;
+}
+
+.resetBtn{
+    
+}
