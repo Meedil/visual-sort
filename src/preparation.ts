@@ -1,4 +1,4 @@
-export const timePerStep = 1000;
+export const timePerStep = 100;
 
 export const shuffle = (array:any[]) => {
     let currentIndex = array.length,  randomIndex;

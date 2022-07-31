@@ -1,7 +1,8 @@
+import { setTokenSourceMapRange } from 'typescript';
 import { timePerStep, shuffle, isSorted } from '../preparation';
 
 //Insert Sort extras
-function moveElementBack(array:any[], fromIndex:number, toIndex:number){
+export function moveElementBack(array:any[], fromIndex:number, toIndex:number){
     let arr1 = array.splice(0, toIndex);
     let arr2 = array.splice(0, fromIndex - toIndex);
     
@@ -11,7 +12,7 @@ function moveElementBack(array:any[], fromIndex:number, toIndex:number){
 }
 
 //Select sort and Bubble Sort extras
-function swapElements(array:any[], index1:number, index2:number){
+export function swapElements(array:any[], index1:number, index2:number){
     let temp = array[index1];
     array[index1] = array[index2];
     array[index2] = temp;
@@ -20,26 +21,31 @@ function swapElements(array:any[], index1:number, index2:number){
     return[...array];
 }
 
+export interface sortStepResult{
+    array: number[],
+    step: number,
+    countOffset: number,
+}
+
 export enum SortAlgorithm{
     bogoSort,
     insertionSort,
     selectionSort,
-    bubblesort
+    bubblesort,
 }
 
 export const sortStep:Function[] = [
     //bogosort = 0
-    (array:number[], step = 0) => {
-        let result = [...shuffle(array)];
-        console.log(array);
+    (array:number[], step):sortStepResult => {
         
-        return {array: result, step: ++step};
+        let result = [...shuffle(array)];
+        return {array: result, step: ++step, countOffset: 1};
     },
 
     //insertionsort = 1
-    (array:number[], step = 0) => {
+    (array:number[], setArray:Function, step, setStep:Function, count,setCount:Function):sortStepResult => {
         let result = [...array];
-        let count = 0;
+        let countOffset = 0;
 
         for(let i = 0; i < step+1; i++){
             const element = result[i];
@@ -49,14 +55,14 @@ export const sortStep:Function[] = [
             }
         }
         
-        return {array: result, step: ++step, countOffset: count};
+        return {array: result, step: ++step, countOffset: countOffset};
     },
 
-    //selectionsort = 4
-    (array:number[], step = 0) => {
+    //selectionsort = 2
+    (array:number[], setArray:Function, step, setStep:Function, count,setCount:Function):sortStepResult => {
         let result = [...array];
         let minIndex = step;
-        let count = 0;
+        let countOffset = 0;
 
         for(let i = step+1; i < array.length; i++){
             minIndex = array[i] < array[minIndex] ? i : minIndex;
@@ -64,11 +70,11 @@ export const sortStep:Function[] = [
         }
         result = swapElements(result, step, minIndex);
 
-        return {array: result, step: ++step, countOffset: count};
+        return {array: result, step: ++step, countOffset: countOffset};
     },
 
     //bubblesort = 3
-    (array:number[], step=0) => {
+    (array:number[], setArray:Function, step, setStep:Function, count,setCount:Function):sortStepResult => {
         let result = [...array];
         step = (step+1)%array.length;
 
@@ -77,6 +83,11 @@ export const sortStep:Function[] = [
         }
 
         return {array: result, step: step, countOffset: 1};
+    },
+    
+    //quicksort = 4
+    (array:number[], left:number, right:number, step=0, lowEnd=-1)=>{
+        let result = [...array];
+        
     }
 ];
-
