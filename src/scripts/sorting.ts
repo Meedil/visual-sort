@@ -27,67 +27,16 @@ export interface sortStepResult{
     countOffset: number,
 }
 
+
+export interface sorter{
+    name: string,
+    step: Function,
+    // data?: any;
+}
+
 export enum SortAlgorithm{
     bogoSort,
     insertionSort,
     selectionSort,
     bubblesort,
 }
-
-export const sortStep:Function[] = [
-    //bogosort = 0
-    (array:number[], step):sortStepResult => {
-        
-        let result = [...shuffle(array)];
-        return {array: result, step: ++step, countOffset: 1};
-    },
-
-    //insertionsort = 1
-    (array:number[], setArray:Function, step, setStep:Function, count,setCount:Function):sortStepResult => {
-        let result = [...array];
-        let countOffset = 0;
-
-        for(let i = 0; i < step+1; i++){
-            const element = result[i];
-            count++;
-            if(result[step+1] < element){
-                result = moveElementBack(result, step+1, i);
-            }
-        }
-        
-        return {array: result, step: ++step, countOffset: countOffset};
-    },
-
-    //selectionsort = 2
-    (array:number[], setArray:Function, step, setStep:Function, count,setCount:Function):sortStepResult => {
-        let result = [...array];
-        let minIndex = step;
-        let countOffset = 0;
-
-        for(let i = step+1; i < array.length; i++){
-            minIndex = array[i] < array[minIndex] ? i : minIndex;
-            count++;
-        }
-        result = swapElements(result, step, minIndex);
-
-        return {array: result, step: ++step, countOffset: countOffset};
-    },
-
-    //bubblesort = 3
-    (array:number[], setArray:Function, step, setStep:Function, count,setCount:Function):sortStepResult => {
-        let result = [...array];
-        step = (step+1)%array.length;
-
-        if(result[step] < result[step-1]){
-            result = swapElements(result, step, step-1);
-        }
-
-        return {array: result, step: step, countOffset: 1};
-    },
-    
-    //quicksort = 4
-    (array:number[], left:number, right:number, step=0, lowEnd=-1)=>{
-        let result = [...array];
-        
-    }
-];

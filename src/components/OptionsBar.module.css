@@ -5,3 +5,15 @@
     background-color: rgb(61, 52, 124);
     padding: 20px;
 }
+.dropdownContainer{
+    width: fit-content;
+
+}
+.dropdownItem{
+    user-select: none;
+    padding: 10px 15px;
+    background: #555;
+}
+.dropdownItem:hover{
+    background: #333;
+}
