@@ -9,7 +9,8 @@ interface ArrayVisualizerProps{
 }
 
 export default function ArrayVisualizer({array}:ArrayVisualizerProps){
-    const bars = array.map((height, index) => <ValueBar height={(height/array.length) * 100} first={index == 0} />);
+    const gap = 1/array.length;
+    const bars = array.map((height, index) => <ValueBar height={(height/array.length) * 100} gap={gap} first={index == 0} />);
 
     return(
         <div className={style.container}>

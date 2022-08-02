@@ -1,5 +1,7 @@
 .container{
     display: flex;
     justify-content: center;
-    height: 200px;
+    height: 400px;
+    max-width: 100%;
+    overflow: hidden;
 }

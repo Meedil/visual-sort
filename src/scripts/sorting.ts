@@ -16,8 +16,6 @@ export function swapElements(array:any[], index1:number, index2:number){
     let temp = array[index1];
     array[index1] = array[index2];
     array[index2] = temp;
-    console.log(`swapping i=${index1} and i=${index2}`);
-    console.log('array: ', array)
     return[...array];
 }
 

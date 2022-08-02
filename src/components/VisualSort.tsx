@@ -2,7 +2,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import ArrayVisualizer from "./ArrayVisualizer";
 import OptionsBar from "./OptionsBar";
 
-import generateArray, { isSorted, timePerStep, shuffle } from "../preparation";
+import generateArray, { isSorted, shuffle } from "../preparation";
 import { swapElements, moveElementBack, SortAlgorithm, sorter} from "../scripts/sorting";
 
 import styles from "./VisualSort.module.css";
@@ -12,60 +12,62 @@ interface visualSortState{
     count?: number,
     changeCount?:number,
     isSorting?: boolean,
+    extraData?: any
     selectedSort?:SortAlgorithm,
 }
 
+const loadedSort:SortAlgorithm = localStorage.getItem("selectedSort") == null ? 0 : parseInt(localStorage.getItem("selectedSort"));
+
 export default function VisualSort(props){
     const [arraySize, setArraySize] = useState<number>(4);
+    const [selectedSort, setSelectedSort] = useState(loadedSort); 
+    const [timePerStep, setTimePerStep] = useState(500);
+
     const [array, setArray] = useState(generateArray(arraySize));
     const [step, setStep] = useState(0);
     const [count, setCount] = useState(0);
     const [changeCount, setChangeCount] = useState(0);
     const [isSorting, setSorting] = useState(false);
+    const [extraData, setExtraData] = useState<any>();
 
-    const [selectedSort, setSelectedSort] = useState(SortAlgorithm.bogoSort); 
-
-    const setState = ({array, step, count, changeCount, isSorting, selectedSort}:visualSortState) => {
+    const setState = ({array, step, count, changeCount, isSorting, selectedSort, extraData: extraData}:visualSortState) => {
         //Sorting state-vars
         (array != undefined) && setArray(array);
         (step != undefined) && setStep(step);
         (count != undefined) && setCount(count);
         (changeCount != undefined) && setChangeCount(changeCount);
         (isSorting != undefined) && setSorting(isSorting);
+        (extraData != undefined) && setExtraData(extraData);
         //Options state-vars
         (selectedSort != undefined) && setSelectedSort(selectedSort);
     }
 
 
-
+    //Calles setTime out to carry out sorting steps
     useEffect(() => {
         let timer = setTimeout(() => {if(isSorting){sorters[selectedSort].step();}}, timePerStep);
     }, [isSorting, array])
 
     //on load get from local storage
     useEffect(() => {
-        let loadedSort:SortAlgorithm = parseInt(localStorage.getItem("selectedSort"));
+        
         setState({
             selectedSort: loadedSort,
-        })
-        console.log(`loaded ${loadedSort}`);
-        
+        })        
     }, [])
     //on option state-var updates update, set local storage
     useEffect(() => {
-        console.log("selected sort: ", selectedSort);
-        
         localStorage.setItem("selectedSort", selectedSort.toString());
     }, [selectedSort])
 
     useEffect(() => {
-        console.log('step: ', step);
     }, [step])
+    useEffect(() => {
+    }, [arraySize])
 
 
     const startSort = () => {
         setSorting(true);
-        sorters[selectedSort].step();
     }
 
     const reset = () => {
@@ -74,7 +76,8 @@ export default function VisualSort(props){
             step: 0, 
             count: 0, 
             changeCount: 0, 
-            isSorting: false
+            isSorting: false,
+            extraData: {}
         });
     }
 
@@ -118,32 +121,42 @@ export default function VisualSort(props){
             let result = [...array];
             let minIndex = step;
             let countOffset = 0;
+            let changed = false;
     
             for(let i = step+1; i < array.length; i++){
                 minIndex = array[i] < array[minIndex] ? i : minIndex;
                 countOffset++;
             }
             result = swapElements(result, step, minIndex);
+            changed = step != minIndex; 
 
-            setState({array: result, step: step+1, count: count + countOffset});
+            setState({array: result, step: step+1, count: count + countOffset, changeCount: changeCount + (+changed)});
+            if (step+1 >= array.length - 1){
+                setSorting(false);
+            } 
         }},
     
         //bubblesort = 3
         {name: "Bubble Sort", 
-        step: (changed:boolean=false) => {
+        step: () => {
             let result = [...array];
             let nextStep = (step+1)%array.length;
+            let swapped = false;
     
             if(nextStep == 0){
-                if(!changed) {setSorting(false); return;}
-                changed = false;
+                if(!extraData.changed) {setSorting(false);}
+                extraData.changed = false;
+                setState({array: result, step: nextStep})
+                return;
             }
 
             if(result[nextStep] < result[nextStep-1]){
                 result = swapElements(result, nextStep, nextStep-1);
+                swapped = true;
+                extraData.changed = true;
             }
     
-            setState({array: array, step: nextStep, count: count + 1})
+            setState({array: result, step: nextStep, count: count + 1, changeCount: changeCount + (+swapped)});
         }},
         
         //quicksort = 4
@@ -157,7 +170,7 @@ export default function VisualSort(props){
     
     return(
         <>
-            <OptionsBar setSelectedSort={(sort:SortAlgorithm) => setSelectedSort(sort)} selectedSort={selectedSort} sorters={sorters}/>
+            <OptionsBar setSelectedSort={(sort:SortAlgorithm) => setSelectedSort(sort)} selectedSort={selectedSort} sorters={sorters} arraySize={arraySize} setArraySize={(size:number) => setArraySize(size)}/>
             <ArrayVisualizer array={array}/>
             <div className={styles.buttonContainer}>
                 <button className={`${styles.btn} ${styles.sortBtn} ${styles.primaryBtn}`} onClick={startSort} disabled={isSorting || isSorted(array)}>SORT</button>

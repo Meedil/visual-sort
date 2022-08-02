@@ -1,4 +1,4 @@
-export const timePerStep = 1000;
+export const timePerStep = 5;
 
 export const shuffle = (array:any[]) => {
     let currentIndex = array.length,  randomIndex;
@@ -25,7 +25,7 @@ export const isSorted = (array:number[], ascending = true) => {
             }
         }
         else if (array[i] > array[i-1]){
-            return false
+            return false;
         }
     }
     return true;
@@ -43,7 +43,8 @@ interface range{
  * @param {range | undefined} numRange range of the random numbers if oneToN is false
  */
  const generateArray = (n:number, oneToN:boolean = true, numRange?:range) => {
-    let array:number[] = new Array(n);
+    let array:number[] = new Array(n ? parseInt(n.toString()) : 1);
+    
     if(oneToN){
         for (let i = 0; i < array.length; i++) {
             array[i] = i+1;
@@ -52,7 +53,6 @@ interface range{
     } else {
         array = array.map(() => Math.floor(Math.random()*(numRange.max-numRange.min) + numRange.min));
     }
-    
     
     return array;
 }
