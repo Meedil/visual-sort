@@ -1,5 +1,5 @@
 import { setTokenSourceMapRange } from 'typescript';
-import { timePerStep, shuffle, isSorted } from '../preparation';
+import { shuffle, isSorted } from '../preparation';
 
 //Insert Sort extras
 export function moveElementBack(array:any[], fromIndex:number, toIndex:number){
