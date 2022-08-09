@@ -1,18 +1,18 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ArrayVisualizer from "./ArrayVisualizer";
 import OptionsBar from "./OptionsBar";
 
 import generateArray, { isSorted, shuffle } from "../preparation";
-import { swapElements, moveElementBack, SortAlgorithm, sorter} from "../scripts/sorting";
+import { SortAlgorithm, sorter} from "../classes/sorter";
 
 import styles from "./VisualSort.module.css";
-import { parse } from "path";
+
 interface visualSortState{
-    array?: number[],
-    step?: number,
-    count?: number,
-    changeCount?:number,
-    isSorting?: boolean,
+    array?: number[],               //Array on display
+    step?: number,                  //Current step of on-going sorting
+    count?: number,                 //Number of comparisons 
+    changeCount?:number,            //Number of steps done
+    isSorting?: boolean,            //Status of whether or not sorting is currently ongoing
     extraData?: any
     selectedSort?:SortAlgorithm,
 }
@@ -50,12 +50,11 @@ export default function VisualSort(props){
 
     //Calles setTime out to carry out sorting steps
     useEffect(() => {
-        let timer = setTimeout(() => {if(isSorting){sorters[selectedSort].step();}}, timePerStep);
+        let timer = setTimeout(() => {if(isSorting){sorters[selectedSort].executeStep();}}, timePerStep);
     }, [isSorting, array])
 
     //on load get from local storage
     useEffect(() => {
-        
         setState({
             selectedSort: loadedSort,
         })        
@@ -71,7 +70,6 @@ export default function VisualSort(props){
         
         localStorage.setItem("timePerStep", timePerStep.toString());
     }, [timePerStep]);
-
 
 
 
@@ -91,89 +89,7 @@ export default function VisualSort(props){
     }
 
     const sorters:sorter[] = [
-        //bogosort = 0
-        {name:"Bogosort", 
-        step: () => {
-            let result = [...shuffle(array)];
-            
-            setState({array: result, count: count + 1});
-            if(isSorted(result)) {setSorting(false);}
-        }},
-    
-        //insertionsort = 1
-        {name: "Insertion Sort",
-        step: () => {
-            if(!isSorting)return;
-            let result = [...array];
-            let countOffset = 0;
-            let changed = false;
-
-            for(let i = 0; i < step+1; i++){
-                const element = result[i];
-                countOffset++;
-
-                if(result[step+1] < element){
-                    result = moveElementBack(result, step+1, i);
-                    changed = true;
-                }
-            }
-            
-            setState({array: result, step: step + 1, count: count + countOffset, changeCount: changeCount + (+changed)})
-            if (step+1 >= array.length - 1){
-                setSorting(false);
-            } 
-        }},
-    
-        //selectionsort = 2
-        {name: "Selection Sort", 
-        step: () => {
-            let result = [...array];
-            let minIndex = step;
-            let countOffset = 0;
-            let changed = false;
-    
-            for(let i = step+1; i < array.length; i++){
-                minIndex = array[i] < array[minIndex] ? i : minIndex;
-                countOffset++;
-            }
-            result = swapElements(result, step, minIndex);
-            changed = step != minIndex; 
-
-            setState({array: result, step: step+1, count: count + countOffset, changeCount: changeCount + (+changed)});
-            if (step+1 >= array.length - 1){
-                setSorting(false);
-            } 
-        }},
-    
-        //bubblesort = 3
-        {name: "Bubble Sort", 
-        step: () => {
-            let result = [...array];
-            let nextStep = (step+1)%array.length;
-            let swapped = false;
-    
-            if(nextStep == 0){
-                if(!extraData.changed) {setSorting(false);}
-                extraData.changed = false;
-                setState({array: result, step: nextStep})
-                return;
-            }
-
-            if(result[nextStep] < result[nextStep-1]){
-                result = swapElements(result, nextStep, nextStep-1);
-                swapped = true;
-                extraData.changed = true;
-            }
-    
-            setState({array: result, step: nextStep, count: count + 1, changeCount: changeCount + (+swapped)});
-        }},
         
-        //quicksort = 4
-        {name: "Quick Sort",
-        step: (left:number, right:number, lowEnd=-1)=>{
-            let result = [...array];
-            
-        }}
     ];
     
     const calculateTimePerStep = (speed:number) => {

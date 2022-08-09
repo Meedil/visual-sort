@@ -1,5 +1,5 @@
 import styles from './OptionsBar.module.css';
-import {SortAlgorithm, sorter} from '../scripts/sorting';
+import {SortAlgorithm, sorter} from '../classes/sorter';
 import { useState, useEffect } from 'react';
 import { maxTime, minTime } from './VisualSort';
 
