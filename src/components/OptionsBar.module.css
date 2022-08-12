@@ -1,0 +1,44 @@
+*{
+
+}
+.container{
+    display: flex;
+    background-color: rgb(61, 52, 124);
+    padding: 20px;
+}
+.dropdownContainer{
+    width: fit-content;
+    color: white;
+}
+.dropdownItem{
+    user-select: none;
+    padding: 10px 15px;
+    background: #555;
+}
+.dropdownItem:hover{
+    background: #333;
+}
+
+.selectedDropdownItem:hover{
+    color:white
+}
+.selectedDropdownItem{
+    background-color: #eee;
+    color: black;
+}
+
+.arraySize{
+    height: 20px;
+}
+
+.label{
+    color: white;
+    margin: 0 10px 0 20px;
+}
+
+.slider{
+    width: 100%;
+}
+.sliderContainer{
+    width: 200px;
+}
