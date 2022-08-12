@@ -9,35 +9,39 @@ export function insertElement(array:any[], value:any, index:number){
 }
 
 export class insertionSort extends sorter{
-    constructor(array?:number[]){
-        super(array);
-        this.stepDetailsQueue = 1;
-        this.name = "Insertion Sort"
+    constructor(){
+        super();
+        this.stepStack = 1;
+        this.name = "Insertion Sort";
     }
 
     isSorted(): boolean {
-        return this.stepDetailsQueue >= sorter.array.length;
+        return this.stepStack > this.array.length;
     }
     
-    getNextStep() {
-        return this.stepDetailsQueue++;
+    getCurrentStep() {
+        return this.stepStack++;
     }
     
     executeStep(): number[] {
-        super.executeStep();    //cancels if sorted
+        if(this.isSorted()) return this.array;
 
-        let result = [...sorter.array];
-        let i = this.getNextStep();
+        let i = this.getCurrentStep();
 
         for(let j = 0; j < i; j++){
             this.comparisonCount++;
-            if(sorter.array[j] > sorter.array[i]){
-                let temp = sorter.array.splice(i, 1);
-                sorter.array = insertElement(sorter.array, temp[0], j);
-                this.arrayChanges += 2;
+            if(this.array[j] > this.array[i]){
+                let temp = this.array.splice(i, 1);
+                this.array = insertElement(this.array, temp[0], j);
+                this.arrayEditsCount += 2;
             }
         }
 
-        return result;
+        return [...this.array];
+    }
+    
+    reset(): void {
+        super.reset();
+        this.stepStack = 1;
     }
 }

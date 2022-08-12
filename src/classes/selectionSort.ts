@@ -1,34 +1,40 @@
 import { sorter } from "./sorter";
 
 export class selectionSort extends sorter{
-    constructor(array:number[]){
-        super(array);
-        this.name = "selectionSort";
-        this.stepDetailsQueue = 0;
+    constructor(array?:number[]){
+        super();
+        this.name = "Selection Sort";
+        this.stepStack = 0;
     }
 
     executeStep(): number[] {
-        super.executeStep();
-        let result = [...sorter.array];
-        let i = this.getNextStep();
-        let indexOfMin = 0;
+        if(this.isSorted()) return this.array;
+        
+        let i = this.getCurrentStep();
+        let indexOfMin = i;
 
-        for(let j = i; j < sorter.array.length; j++){
-            if(sorter.array[j] < sorter.array[indexOfMin]){
+        for(let j = i; j < this.array.length; j++){
+            if(this.array[j] < this.array[indexOfMin]){
                 indexOfMin = j;
             }
             this.comparisonCount++;
         }
+        
         this.swap(i, indexOfMin);
 
-        return result;
+        return [...this.array];
     }
 
     isSorted(): boolean {
-        return this.stepDetailsQueue >= sorter.array.length
+        return this.stepStack >= this.array.length;
     }
 
-    getNextStep() {
-        return this.stepDetailsQueue++;
+    getCurrentStep() {
+        return this.stepStack++;
+    }
+
+    reset(): void {
+        super.reset();
+        this.stepStack = 0;
     }
 }

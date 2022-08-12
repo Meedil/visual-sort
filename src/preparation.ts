@@ -2,7 +2,7 @@ export const shuffle = (array:any[]) => {
     let currentIndex = array.length,  randomIndex;
 
     // While there remain elements to shuffle.
-    while (currentIndex != 0) {
+    while (currentIndex !== 0) {
 
         // Pick a remaining element.
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -46,6 +46,8 @@ export const isSorted = (array:number[], ascending = true) => {
     } else {
         for(let i = 0; i < array.length; i++) array[i] = Math.floor(Math.random()*(n-1) + 1);
     }
+
+    console.log(array);
     
     return array;
 }

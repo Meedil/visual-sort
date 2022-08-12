@@ -1,5 +1,6 @@
 import styles from './OptionsBar.module.css';
-import {SortAlgorithm, sorter} from '../classes/sorter';
+import { sorter } from '../classes/sorter';
+import { SortAlgorithm } from '../classes/sorters';
 import { useState, useEffect } from 'react';
 import { maxTime, minTime } from './VisualSort';
 
@@ -23,11 +24,12 @@ setTimePerStep}:OptionsBarProps){
     const [speed, setSpeed] = useState(calculateSpeed(timePerStep));
 
     const dropdownItems = sorters.map((s:sorter, index:number) => {
-        return <div className={styles.dropdownItem + ' ' + (index == selectedSort ? styles.selectedDropdownItem : null)} onClick={() => setSelectedSort(index)}>{s.name}</div>
+        return <div className={styles.dropdownItem + ' ' + (index === selectedSort ? styles.selectedDropdownItem : null)} onClick={() => setSelectedSort(index)}>{s.name}</div>
     })
 
     useEffect(() => {
         setTimePerStep(speed);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [speed]);
 
     return(
@@ -36,8 +38,10 @@ setTimePerStep}:OptionsBarProps){
                 {dropdownItems}
             </div>
             <label htmlFor="array-size" className={styles.label}>Size of Array</label>
-            <input name='array-size' type="number" value={arraySize} onChange={(e) => { console.log(e.target.value);
-             setArraySize(e.target.value); } } className={styles.arraySize} />
+            <input name='array-size' type="number" value={arraySize} 
+                onChange={(e) => {setArraySize(e.target.value); } } 
+                className={styles.arraySize} 
+            />
 
             <label htmlFor="time-per-step" className={styles.label}>Sorting Speed</label>
             <div className={styles.sliderContainer}><input type="range" name="array-size" min="1" max="100" id="timePerStepSlider" className={styles.slider} value={speed} onInput={(e) => {setSpeed(parseInt((document.getElementById("timePerStepSlider") as HTMLInputElement).value))}}/></div>

@@ -9,18 +9,18 @@ export class bogoSort extends sorter{
     }
 
     executeStep(): number[] {
-        super.executeStep();
+        if(this.isSorted()) return this.array;
 
-        let result = [...sorter.array];
+        let result = [...this.array];
         shuffle(result);
-        this.arrayChanges += sorter.array.length;
+        this.arrayEditsCount += this.array.length;
         return result;
     }
 
     isSorted(): boolean {
-        return isSorted(sorter.array);
+        return isSorted(this.array);
     }
-    getNextStep() {
+    getCurrentStep() {
         
     }
 }

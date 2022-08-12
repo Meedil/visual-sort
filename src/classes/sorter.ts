@@ -1,43 +1,39 @@
 import {isSorted } from '../preparation';
 
 export abstract class sorter{
-    name: string;                   //TODO: Determine the necessity of this property
-    static array?: number[];
+    name: string;
+    array?: number[];
     comparisonCount: number;
-    arrayChanges: number;
-    stepDetailsQueue?:any;
+    arrayEditsCount: number;
+    stepStack?:any;
 
-    constructor(array?:number[]){
+    constructor(){
         this.comparisonCount = 0;
-        this.arrayChanges = 0;
-        sorter.passArray(array)
+        this.arrayEditsCount = 0;
     }
 
-    executeStep(): number[]{
-        if(this.isSorted()){return sorter.array}
-    };
+    reset():void{
+        this.comparisonCount = 0;
+        this.arrayEditsCount = 0;
+    }
+
+    abstract executeStep(): number[];
     isSorted(): boolean{
-        return isSorted(sorter.array);
+        return isSorted(this.array);
     };
-    getNextStep?(): any;
+    getCurrentStep?(): any;
 
-    static passArray(array:number[]): void{
-        sorter.array = array;
+    passArray(array:number[]): void{
+        this.array = array;
     }
-    static _swap(index1:number, index2:number){
-        const temp = sorter.array[index1];
-        sorter.array[index1] = sorter.array[index2];
-        sorter.array[index2] = temp;
+    _swap(index1:number, index2:number){
+        const temp = this.array[index1];
+        this.array[index1] = this.array[index2];
+        this.array[index2] = temp;
     }
     swap(index1:number,index2:number){
-        sorter._swap(index1, index2);
-        this.arrayChanges += 2;
+        this._swap(index1, index2);
+        this.arrayEditsCount += 2;
     }
 }
 
-export enum SortAlgorithm{
-    bogoSort,
-    insertionSort,
-    selectionSort,
-    bubblesort,
-}
