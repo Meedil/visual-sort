@@ -4,15 +4,13 @@ class step{
     start:number;
     end:number;
     pivot:number;
-    low:number;
-    i:number;
+    left:number;
+    right:number;
 
-    constructor(start:number, end:number, low?:number, pivot?:number, i?:number){
-        this.start = start;
-        this.i = i === undefined ? start : i;
-        this.end = end;
-        this.pivot = pivot === undefined ? end : pivot;
-        this.low = low === undefined ? start-1 : low;
+    constructor(start:number, end:number, pivot?:number, left?:number, right?:number){
+        this.start = start; this.left = left === undefined ? start : left;
+        this.end = end; this.right = right === undefined ? end : right;
+        this.pivot = pivot === undefined ? Math.floor((start+end)/2) : pivot;
     }
 }
 
@@ -30,35 +28,42 @@ export class quickSort extends sorter{
         let changed = false;
 
         let s = this.getCurrentStep();
-        let {start, end, low, pivot, i} = s;
+        let {start, end, pivot: mid, left, right} = s;
+        let pivot = this.array[mid];
         
-        if(start >= end){
+        if(start >= end)
             return [...this.array];
-        }
+        
 
-        if(i<pivot){    //Partition-step if i < pivot
-            this.comparisonCount++;
-            
-            if(this.array[i] < this.array[pivot]){
-                low++;
-                this.swap(i, low);
+        if(left < mid || right > mid){
+            let moveLeft = () => this.array[left] < pivot;
+            let moveRight = () => this.array[right] > pivot;
+
+            if(!(moveRight() || moveLeft())){
+                if(left === mid) mid = right;
+                else if(right === mid) mid = left;
+
+                this.swap(left, right);
                 changed = true;
             }
+
+            if(moveLeft())
+                left++;
             
-            this.pushStep(new step(start, end, low, pivot, ++i));
-        } 
-        else if(i===pivot){   //When partition ends
-            this.swap(low+1, pivot);
-            changed = true;
-            pivot = low+1;
-            
-            this.pushStep(new step(pivot+1, end));
-            this.pushStep(new step(start, low));
+            if(moveRight())
+                right--;
+
+            this.stepStack.push(new step(start, end, mid, left, right))
+        }else if(left === mid && right === mid){
+            this.stepStack.push(new step(mid+1, end))
+            this.stepStack.push(new step(start, mid-1))
         }
-        
-        if (changed)
+
+        console.log(...this.stepStack);
+
+        if(changed)
             return [...this.array];
-        else 
+        else
             return this.executeStep();
     }
 
