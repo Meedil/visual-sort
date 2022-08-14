@@ -59,8 +59,6 @@ export class quickSort extends sorter{
             this.stepStack.push(new step(start, mid-1))
         }
 
-        console.log(...this.stepStack);
-
         if(changed)
             return [...this.array];
         else

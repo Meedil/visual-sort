@@ -23,28 +23,51 @@ setTimePerStep}:OptionsBarProps){
     }
     const [speed, setSpeed] = useState(calculateSpeed(timePerStep));
 
-    const dropdownItems = sorters.map((s:sorter, index:number) => {
-        return <div className={styles.dropdownItem + ' ' + (index === selectedSort ? styles.selectedDropdownItem : null)} onClick={() => setSelectedSort(index)}>{s.name}</div>
-    })
+    const dropdownItems = 
+    <div className={styles.dropdownItemsContainer}>{
+        sorters.map((s:sorter, index:number) => {
+            return <div className={styles.dropdownItem + ' ' + (index === selectedSort ? styles.selectedDropdownItem : '')} onClick={() => setSelectedSort(index)}>{s.name}</div>
+        })
+    }</div>
 
     useEffect(() => {
         setTimePerStep(speed);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [speed]);
 
+    useEffect(() => {
+        const outOfDropdownHandler = (e) => {
+            const dropdownButton = document.querySelector('.' + styles.selectedDropdownItem);
+            console.log('target: ', e.target);
+            console.log('dropdown: ', dropdownButton);
+
+            if(e.target !== dropdownButton){
+                document.getElementById('sort-dropdown').setAttribute('data-dropped', 'false');
+            }
+        };
+        window.addEventListener('click', outOfDropdownHandler);
+        // return window.removeEventListener('click', outOfDropdownHandler);
+      }, []);
+
+    const toggleSortDropdown = () => {
+        const dropdown = document.getElementById('sort-dropdown');
+        const dropped:boolean = dropdown.getAttribute('data-dropped') === "true";
+        dropdown.setAttribute('data-dropped', String(!dropped));
+    }
+
     return(
         <div className={styles.container}>
-            <div className={styles.dropdownContainer}>
+            <div id='sort-dropdown' data-dropped="false" className={styles.dropdownContainer} onClick={() => toggleSortDropdown()}>
                 {dropdownItems}
             </div>
             <label htmlFor="array-size" className={styles.label}>Size of Array</label>
             <input name='array-size' type="number" value={arraySize} 
-                onChange={(e) => {setArraySize(e.target.value); } } 
+                onChange={(e) => {setArraySize(e.target.value);}}
                 className={styles.arraySize} 
             />
 
             <label htmlFor="time-per-step" className={styles.label}>Sorting Speed</label>
             <div className={styles.sliderContainer}><input type="range" name="array-size" min="1" max="100" id="timePerStepSlider" className={styles.slider} value={speed} onInput={(e) => {setSpeed(parseInt((document.getElementById("timePerStepSlider") as HTMLInputElement).value))}}/></div>
-        </div>
+        </div>  
     )
 }

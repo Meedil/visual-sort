@@ -24,6 +24,7 @@ export abstract class sorter{
     getCurrentStep?(): any;
 
     passArray(array:number[]): void{
+        this.reset();
         this.array = array;
     }
     _swap(index1:number, index2:number){

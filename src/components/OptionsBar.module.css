@@ -6,17 +6,29 @@
     background-color: rgb(61, 52, 124);
     padding: 20px;
 }
+
 .dropdownContainer{
-    width: fit-content;
+    position: relative;
+    width: 160px;
     color: white;
 }
+.dropdownContainer[data-dropped="false"] .dropdownItem{
+    display: none;
+}
+
+
 .dropdownItem{
+    position: relative;
     user-select: none;
     padding: 10px 15px;
     background: #555;
 }
 .dropdownItem:hover{
     background: #333;
+}
+.dropdownItemsContainer{
+    position:absolute;
+    width: 100%;
 }
 
 .selectedDropdownItem:hover{
@@ -25,6 +37,7 @@
 .selectedDropdownItem{
     background-color: #eee;
     color: black;
+    display: block !important;
 }
 
 .arraySize{

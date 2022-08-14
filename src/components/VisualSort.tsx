@@ -81,7 +81,7 @@ export default function VisualSort(props){
 
     const startSort = () => {
         setSorting(true);
-        // setArray(sorters[selectedSort].executeStep());
+        // sorters[selectedSort].passArray(array);
     }
 
     const reset = () => {
@@ -103,11 +103,16 @@ export default function VisualSort(props){
         let time = (minTime - maxTime)/99*speed + maxTime+(maxTime-minTime)/99; //calculate time using a linear function
         return time;
     }
+
+    const selectSort = (alg:SortAlgorithm) => {
+        sorters[alg].passArray(array);
+        setSelectedSort(alg);
+    }
     
     return(
         <>
             <OptionsBar 
-                setSelectedSort={(sort:SortAlgorithm) => setSelectedSort(sort)} 
+                setSelectedSort={(sort:SortAlgorithm) => selectSort(sort)} 
                 selectedSort={selectedSort} 
                 sorters={sorters} 
                 arraySize={arraySize} 
