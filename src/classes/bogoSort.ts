@@ -13,6 +13,7 @@ export class bogoSort extends sorter{
 
         let result = [...this.array];
         shuffle(result);
+        this.array = result;
         this.arrayEditsCount += this.array.length;
         return result;
     }

@@ -28,10 +28,12 @@ const initialArray = generateArray(loadedArraySize, false);
 const loadedTimePerStep:number = localStorage.getItem("timePerStep") == null ? 100 : parseInt(localStorage.getItem("timePerStep"));
 
 export default function VisualSort(props){
+    //OPTION STATE VARIABLES
     const [arraySize, setArraySize] = useState<number>(loadedArraySize);
     const [selectedSort, setSelectedSort] = useState(loadedSort); 
     const [timePerStep, setTimePerStep] = useState(100);
-
+    const [perfectLine, setPerfectLine] = useState(true);
+    //SORTING STATE VARIABLES
     const [array, setArray] = useState(initialArray);
     const [count, setCount] = useState(0);
     const [changeCount, setChangeCount] = useState(0);
@@ -75,13 +77,12 @@ export default function VisualSort(props){
         localStorage.setItem("arraySize", arraySize.toString());
     }, [arraySize]);
     useEffect(() => {   //update timePerStep in localstorage
-        
         localStorage.setItem("timePerStep", timePerStep.toString());
     }, [timePerStep]);
 
     const startSort = () => {
         setSorting(true);
-        // sorters[selectedSort].passArray(array);
+        // setArray(sorters[selectedSort].executeStep());
     }
 
     const reset = () => {
@@ -108,6 +109,10 @@ export default function VisualSort(props){
         sorters[alg].passArray(array);
         setSelectedSort(alg);
     }
+
+    const autoGenerateArray = () => {
+        return generateArray(arraySize, perfectLine);
+    }
     
     return(
         <>
@@ -119,6 +124,7 @@ export default function VisualSort(props){
                 setArraySize={(size:number) => setArraySize(size)} 
                 timePerStep={timePerStep}
                 setTimePerStep={speed => setTimePerStep(Math.round(calculateTimePerStep(speed)))} 
+                resetArray={() => setArray(autoGenerateArray())}
             />
             <ArrayVisualizer array={array}/>
             <div className={styles.buttonContainer}>

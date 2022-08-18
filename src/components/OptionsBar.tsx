@@ -12,11 +12,12 @@ interface OptionsBarProps{
     arraySize:number,
     setArraySize:Function, 
     timePerStep:number,
-    setTimePerStep:Function
+    setTimePerStep:Function,
+    resetArray:Function
 }
 
 export default function OptionsBar ({selectedSort, setSelectedSort, sorters, arraySize, setArraySize, timePerStep,
-setTimePerStep}:OptionsBarProps){
+setTimePerStep, resetArray}:OptionsBarProps){
     const calculateSpeed = (time:number) => {
         let speed = (99*(time - maxTime) + (minTime-maxTime)) / (minTime - maxTime);
         return speed;
@@ -46,7 +47,7 @@ setTimePerStep}:OptionsBarProps){
             }
         };
         window.addEventListener('click', outOfDropdownHandler);
-        // return window.removeEventListener('click', outOfDropdownHandler);
+        return window.removeEventListener('click', outOfDropdownHandler);
       }, []);
 
     const toggleSortDropdown = () => {
@@ -61,8 +62,10 @@ setTimePerStep}:OptionsBarProps){
                 {dropdownItems}
             </div>
             <label htmlFor="array-size" className={styles.label}>Size of Array</label>
-            <input name='array-size' type="number" value={arraySize} 
+            <input name='array-size' type="number" 
+                value={arraySize} 
                 onChange={(e) => {setArraySize(e.target.value);}}
+                onKeyDown={(e) => {if(e.key.toLowerCase() === "enter"){resetArray()}}}
                 className={styles.arraySize} 
             />
 

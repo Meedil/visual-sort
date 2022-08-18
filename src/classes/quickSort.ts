@@ -27,42 +27,41 @@ export class quickSort extends sorter{
     executeStep(): number[] {
         let changed = false;
 
-        let s = this.getCurrentStep();
-        let {start, end, pivot: mid, left, right} = s;
-        let pivot = this.array[mid];
-        
-        if(start >= end)
-            return [...this.array];
-        
-
-        if(left < mid || right > mid){
-            let moveLeft = () => this.array[left] < pivot;
-            let moveRight = () => this.array[right] > pivot;
-
-            if(!(moveRight() || moveLeft())){
-                if(left === mid) mid = right;
-                else if(right === mid) mid = left;
-
-                this.swap(left, right);
-                changed = true;
-            }
-
-            if(moveLeft())
-                left++;
+        while(!changed && !this.isSorted()){            
+            let s = this.getCurrentStep();
+            let {start, end, pivot: mid, left, right} = s;
+            let pivot = this.array[mid];
             
-            if(moveRight())
-                right--;
+            if(start >= end)
+                return [...this.array];
+            
 
-            this.stepStack.push(new step(start, end, mid, left, right))
-        }else if(left === mid && right === mid){
-            this.stepStack.push(new step(mid+1, end))
-            this.stepStack.push(new step(start, mid-1))
+            if(left < mid || right > mid){
+                let moveLeft = () => this.array[left] < pivot;
+                let moveRight = () => this.array[right] > pivot;
+
+                if(!(moveRight() || moveLeft())){
+                    if(left === mid) mid = right;
+                    else if(right === mid) mid = left;
+
+                    this.swap(left, right);
+                    changed = true;
+                }
+
+                if(moveLeft())
+                    left++;
+                
+                if(moveRight())
+                    right--;
+
+                this.stepStack.push(new step(start, end, mid, left, right))
+            }else if(left === mid && right === mid){
+                this.stepStack.push(new step(mid+1, end))
+                this.stepStack.push(new step(start, mid-1))
+            }
         }
 
-        if(changed)
-            return [...this.array];
-        else
-            return this.executeStep();
+        return [...this.array];
     }
 
     isSorted(): boolean {

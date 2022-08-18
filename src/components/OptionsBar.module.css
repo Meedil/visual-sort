@@ -5,11 +5,13 @@
     display: flex;
     background-color: rgb(61, 52, 124);
     padding: 20px;
+    /* height: 50px; */
 }
 
 .dropdownContainer{
     position: relative;
     width: 160px;
+    height: 40px;
     color: white;
 }
 .dropdownContainer[data-dropped="false"] .dropdownItem{
@@ -35,7 +37,7 @@
     color:white
 }
 .selectedDropdownItem{
-    background-color: #eee;
+    background-color: #efefef;
     color: black;
     display: block !important;
 }
