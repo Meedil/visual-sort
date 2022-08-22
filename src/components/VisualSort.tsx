@@ -86,7 +86,7 @@ export default function VisualSort(props){
     }
 
     const reset = () => {
-        const newArray = generateArray(arraySize,true);
+        const newArray = autoGenerateArray();
         setState({
             array: newArray, 
             step: 0, 
@@ -124,7 +124,7 @@ export default function VisualSort(props){
                 setArraySize={(size:number) => setArraySize(size)} 
                 timePerStep={timePerStep}
                 setTimePerStep={speed => setTimePerStep(Math.round(calculateTimePerStep(speed)))} 
-                resetArray={() => setArray(autoGenerateArray())}
+                resetArray={() => {reset()}}
             />
             <ArrayVisualizer array={array}/>
             <div className={styles.buttonContainer}>

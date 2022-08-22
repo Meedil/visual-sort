@@ -10,6 +10,7 @@ export abstract class sorter{
     constructor(){
         this.comparisonCount = 0;
         this.arrayEditsCount = 0;
+        this.reset();
     }
 
     reset():void{
