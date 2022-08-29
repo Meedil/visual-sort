@@ -98,5 +98,4 @@ export class heapSort extends sorter{
     isSorted(): boolean {
         return this.array.length - this.heapifyOffset === 1;
     }
-
 }
