@@ -11,8 +11,9 @@ export class countingSort extends sorter{
         this.stepStack = 0;
     }
 
-    executeStep(): number[] {
+    executeStep() {
         throw new Error("Method not implemented.");
+        return {array: []}
     }
 
     hashStep(){
@@ -22,6 +23,6 @@ export class countingSort extends sorter{
     }
     
     getCurrentStep() {
-        return this.stepStack++;
+        return this.stepStack++; 
     }
 }

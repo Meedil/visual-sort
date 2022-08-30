@@ -20,12 +20,12 @@ export class mergeSort extends sorter{
         this.stepStack = [];
     }
 
-    executeStep(): number[] {
+    executeStep() {
         if(this.stepStack.length === 0){
             if(!this.isSorted())
                 this.splitArray();
             else
-                return this.array;
+                return {array: this.array};
         }
         return this.mergeStep();
     }
@@ -46,8 +46,8 @@ export class mergeSort extends sorter{
         let {left, right, array1, array2, i1, i2} = s;
         if(array1 === undefined){
             const mid = Math.floor((left + right)/2);
-            array1 = this.arrayExtract(left, mid);
-            array2 = this.arrayExtract(mid+1, right);
+            array1 = this.arrayExtract(left, mid).array;
+            array2 = this.arrayExtract(mid+1, right).array;
             
             i1 = 0; i2 = 0;
         }
@@ -59,7 +59,7 @@ export class mergeSort extends sorter{
         if(v1===undefined && v2===undefined){
             if(this.stepStack.length === 0) {this.sorted = true;}
             
-            return [...this.array];
+            return {array: [...this.array]};
         }
 
         if(v1 === undefined){
@@ -80,7 +80,7 @@ export class mergeSort extends sorter{
         
         this.stepStack.push({left: left, right: right, array1: array1, array2: array2, i1: i1, i2: i2});
         
-        return [...this.array];
+        return {array: [...this.array]};
     }
 
     getCurrentStep(){
@@ -88,8 +88,8 @@ export class mergeSort extends sorter{
     }
 
     arrayExtract(left:number, right:number){
-        if(left > right) return [];
-        return [...this.array].splice(left, right - left + 1);
+        if(left > right) return {array: []};
+        return {array: [...this.array].splice(left, right - left + 1)};
     }
 
     isSorted(): boolean {

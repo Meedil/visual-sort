@@ -1,3 +1,4 @@
+import { color, colorTupple } from "../colors";
 import { sorter } from "./sorter";
 
 class step{
@@ -24,44 +25,49 @@ export class quickSort extends sorter{
         this.stepStack = [];
     }
 
-    executeStep(): number[] {
+    executeStep() {
         let changed = false;
 
-        while(!changed && !this.isSorted()){            
-            let s = this.getCurrentStep();
-            let {start, end, pivot: mid, left, right} = s;
-            let pivot = this.array[mid];
-            
-            if(start >= end)
-                return [...this.array];
-            
+        
+        let s = this.getCurrentStep();
+        let {start, end, pivot: mid, left, right} = s;
+        let pivot = this.array[mid];
+        
+        const colors:colorTupple[] =[
+            {index: mid, color: color.green},
+            {index: left, color: color.red},
+            {index: right, color: color.red},
+        ]
 
-            if(left < mid || right > mid){
-                let moveLeft = () => this.array[left] < pivot;
-                let moveRight = () => this.array[right] > pivot;
+        if(start >= end)
+            return {array: [...this.array]};
+        
 
-                if(!(moveRight() || moveLeft())){
-                    if(left === mid) mid = right;
-                    else if(right === mid) mid = left;
+        if(left < mid || right > mid){
+            let moveLeft = () => this.array[left] < pivot;
+            let moveRight = () => this.array[right] > pivot;
 
-                    this.swap(left, right);
-                    changed = true;
-                }
+            if(!(moveRight() || moveLeft())){
+                if(left === mid) mid = right;
+                else if(right === mid) mid = left;
 
-                if(moveLeft())
-                    left++;
-                
-                if(moveRight())
-                    right--;
-
-                this.stepStack.push(new step(start, end, mid, left, right))
-            }else if(left === mid && right === mid){
-                this.stepStack.push(new step(mid+1, end))
-                this.stepStack.push(new step(start, mid-1))
+                this.swap(left, right);
+                changed = true;
             }
+
+            if(moveLeft())
+                left++;
+            
+            if(moveRight())
+                right--;
+
+            this.stepStack.push(new step(start, end, mid, left, right))
+        }else if(left === mid && right === mid){
+            this.stepStack.push(new step(mid+1, end))
+            this.stepStack.push(new step(start, mid-1))
         }
 
-        return [...this.array];
+        return {array: [...this.array], colors: colors};
     }
 
     isSorted(): boolean {

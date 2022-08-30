@@ -36,8 +36,8 @@ export class heapSort extends sorter{
         return this.getRight(position) < this.array.length;
     }
     
-    executeStep(): number[] {
-        if(this.isSorted()) return this.array;
+    executeStep() {
+        if(this.isSorted()) {return {array: this.array};}
         if(!this.heapified){
             if(this.stepStack.length === 0) this.prepareHeapify();
             this.heapify();
@@ -45,7 +45,7 @@ export class heapSort extends sorter{
             this.swap(this.heapifyOffset, this.array.length-1);            
             this.heapified = false;
         }
-        return [...this.array];
+        return {array: [...this.array]};
     }
 
     heapify(){

@@ -8,14 +8,14 @@ export class bogoSort extends sorter{
         this.name = "Bogosort";
     }
 
-    executeStep(): number[] {
-        if(this.isSorted()) return this.array;
+    executeStep() {
+        if(this.isSorted()) return {array: this.array};
 
         let result = [...this.array];
         shuffle(result);
         this.array = result;
         this.arrayEditsCount += this.array.length;
-        return result;
+        return {array: result};
     }
 
     isSorted(): boolean {

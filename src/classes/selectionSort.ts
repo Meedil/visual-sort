@@ -7,8 +7,8 @@ export class selectionSort extends sorter{
         this.stepStack = 0;
     }
 
-    executeStep(): number[] {
-        if(this.isSorted()) return this.array;
+    executeStep() {
+        if(this.isSorted()) return {array: this.array};
         
         let i = this.getCurrentStep();
         let indexOfMin = i;
@@ -22,7 +22,7 @@ export class selectionSort extends sorter{
         
         this.swap(i, indexOfMin);
 
-        return [...this.array];
+        return {array: [...this.array]};
     }
 
     isSorted(): boolean {

@@ -1,4 +1,9 @@
+import { colorTupple } from '../colors';
 import {isSorted } from '../preparation';
+interface sortResult{
+    array:number[],
+    colors?:colorTupple[],
+}
 
 export abstract class sorter{
     name: string;
@@ -18,7 +23,7 @@ export abstract class sorter{
         this.arrayEditsCount = 0;
     }
 
-    abstract executeStep(): number[];
+    abstract executeStep(): sortResult;
     isSorted(): boolean{
         return isSorted(this.array);
     };

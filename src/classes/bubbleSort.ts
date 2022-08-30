@@ -9,12 +9,12 @@ export class bubbleSort extends sorter{
         this.name = "Bubble Sort";
         this.stepStack = 0;
     }
-    executeStep(): number[] {
+    executeStep() {
         let step = this.getCurrentStep();
         if(this.array[step] > this.array[step+1]){
             this.swap(step, step+1);
         }
-        return [...this.array];
+        return {array: [...this.array]};
     }
     getCurrentStep() {
         let currentStep = this.stepStack;

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import ArrayVisualizer from "./ArrayVisualizer";
+import { color, colorTupple } from "../colors";
 import OptionsBar from "./OptionsBar";
 
 import generateArray, { isSorted } from "../preparation";
@@ -10,6 +11,7 @@ import styles from "./VisualSort.module.css";
 
 interface visualSortState{
     array?: number[],               //Array on display
+    colors?: colorTupple[],         //Holds colors for different 
     step?: number,                  //Current step of on-going sorting
     count?: number,                 //Number of comparisons 
     changeCount?:number,            //Number of steps done
@@ -35,13 +37,15 @@ export default function VisualSort(props){
     const [perfectLine, setPerfectLine] = useState(true);
     //SORTING STATE VARIABLES
     const [array, setArray] = useState(initialArray);
+    const [colors, setColors] = useState([])
     const [count, setCount] = useState(0);
     const [changeCount, setChangeCount] = useState(0);
     const [isSorting, setSorting] = useState(false);
 
-    const setState = ({array, count, changeCount, isSorting, selectedSort}:visualSortState) => {
+    const setState = ({array, colors, count, changeCount, isSorting, selectedSort}:visualSortState) => {
         //Sorting state-vars
         (array !== undefined) && setArray(array);
+        (colors !== undefined) && setColors(colors);
         (count !== undefined) && setCount(count);
         (changeCount !== undefined) && setChangeCount(changeCount);
         (isSorting !== undefined) && setSorting(isSorting);
@@ -57,10 +61,10 @@ export default function VisualSort(props){
     useEffect(() => {
         setTimeout(() => {
             if(isSorting){
-                setArray(sorters[selectedSort].executeStep());
+                setState(sorters[selectedSort].executeStep());
             }
         }, timePerStep);
-        if(sorters[selectedSort].isSorted()) setSorting(false);
+        if(sorters[selectedSort].isSorted()) {setColors([]); setSorting(false);};
     }, [isSorting, array]);
 
     //on load get from local storage
@@ -89,6 +93,7 @@ export default function VisualSort(props){
         const newArray = autoGenerateArray();
         setState({
             array: newArray, 
+            colors: [],
             step: 0, 
             count: 0, 
             changeCount: 0, 
@@ -126,7 +131,7 @@ export default function VisualSort(props){
                 setTimePerStep={speed => setTimePerStep(Math.round(calculateTimePerStep(speed)))} 
                 resetArray={() => {reset()}}
             />
-            <ArrayVisualizer array={array}/>
+            <ArrayVisualizer array={array} colors={colors}/>
             <div className={styles.buttonContainer}>
                 <button className={`${styles.btn} ${styles.sortBtn} ${styles.primaryBtn}`} onClick={startSort} disabled={isSorting || isSorted(array)}>SORT</button>
                 <div className={styles.countDisplay}>Number of comparisons: {count}</div>
