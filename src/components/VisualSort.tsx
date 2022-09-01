@@ -20,7 +20,7 @@ interface visualSortState{
     selectedSort?:SortAlgorithm,
 }
 
-export const maxTime = 700, minTime = 1;
+export const maxTime = 200, minTime = 1;
 
 
 const loadedSort:SortAlgorithm = localStorage.getItem("selectedSort") == null ? 0 : parseInt(localStorage.getItem("selectedSort"));
@@ -33,7 +33,7 @@ export default function VisualSort(props){
     //OPTION STATE VARIABLES
     const [arraySize, setArraySize] = useState<number>(loadedArraySize);
     const [selectedSort, setSelectedSort] = useState(loadedSort); 
-    const [timePerStep, setTimePerStep] = useState(100);
+    const [timePerStep, setTimePerStep] = useState(loadedTimePerStep);
     const [perfectLine, setPerfectLine] = useState(true);
     //SORTING STATE VARIABLES
     const [array, setArray] = useState(initialArray);
@@ -41,6 +41,7 @@ export default function VisualSort(props){
     const [count, setCount] = useState(0);
     const [changeCount, setChangeCount] = useState(0);
     const [isSorting, setSorting] = useState(false);
+    const [sorted, setSorted] = useState(false);
 
     const setState = ({array, colors, count, changeCount, isSorting, selectedSort}:visualSortState) => {
         //Sorting state-vars
@@ -64,7 +65,7 @@ export default function VisualSort(props){
                 setState(sorters[selectedSort].executeStep());
             }
         }, timePerStep);
-        if(sorters[selectedSort].isSorted()) {setColors([]); setSorting(false);};
+        if(sorters[selectedSort].isSorted()) {setColors([]); setSorting(false); setSorted(true)} 
     }, [isSorting, array]);
 
     //on load get from local storage
@@ -101,8 +102,11 @@ export default function VisualSort(props){
             extraData: {}
         });
         
+        setSorted(isSorted(newArray));
         sorters[selectedSort].reset();
         sorters[selectedSort].passArray(newArray);
+
+        return newArray;
     }
     
     const calculateTimePerStep = (speed:number) => {
@@ -111,7 +115,10 @@ export default function VisualSort(props){
     }
 
     const selectSort = (alg:SortAlgorithm) => {
-        sorters[alg].passArray(array);
+        let newArray:number[];
+        if(sorted) newArray = reset();
+
+        sorters[alg].passArray(newArray);
         setSelectedSort(alg);
     }
 
@@ -130,10 +137,11 @@ export default function VisualSort(props){
                 timePerStep={timePerStep}
                 setTimePerStep={speed => setTimePerStep(Math.round(calculateTimePerStep(speed)))} 
                 resetArray={() => {reset()}}
+                sorted = {sorted}
             />
             <ArrayVisualizer array={array} colors={colors}/>
             <div className={styles.buttonContainer}>
-                <button className={`${styles.btn} ${styles.sortBtn} ${styles.primaryBtn}`} onClick={startSort} disabled={isSorting || isSorted(array)}>SORT</button>
+                <button className={`${styles.btn} ${styles.sortBtn} ${styles.primaryBtn}`} onClick={() => startSort()} disabled={isSorting || sorted}>SORT</button>
                 <div className={styles.countDisplay}>Number of comparisons: {count}</div>
                 <div className={styles.countDisplay} >Number of changes: {changeCount}</div> 
                 <button className={`${styles.btn} ${styles.resetBtn} ${styles.primaryBtn}`} onClick={() => {reset()}}>RESET</button>

@@ -1,3 +1,4 @@
+import { color } from "../colors";
 import { sorter } from "./sorter";
 
 
@@ -11,7 +12,7 @@ export class heapSort extends sorter{
     
     constructor(){
         super();
-        
+        this.array = [];
         this.name="Heap Sort";
     }
     
@@ -26,7 +27,6 @@ export class heapSort extends sorter{
         return this.heapifyOffset + (position-this.heapifyOffset)*2+1;
     }
     getRight(position:number){
-
         return this.heapifyOffset + (position-this.heapifyOffset)*2+2;
      }
     hasLeft(position:number){
@@ -40,11 +40,12 @@ export class heapSort extends sorter{
         if(this.isSorted()) {return {array: this.array};}
         if(!this.heapified){
             if(this.stepStack.length === 0) this.prepareHeapify();
-            this.heapify();
-        } else {
-            this.swap(this.heapifyOffset, this.array.length-1);            
-            this.heapified = false;
-        }
+            return this.heapifyStep();
+        } 
+
+        this.swap(this.heapifyOffset, this.array.length-1);            
+        this.heapified = false;
+        
         return {array: [...this.array]};
     }
 
@@ -89,6 +90,13 @@ export class heapSort extends sorter{
             this.heapified = true;
             this.heapifyOffset++;
         }
+
+        return {array: [...this.array], colors: [
+            {index: position, color: color.red},
+            {index: this.heapifyOffset, color: color.green},
+            {index: this.getLeft(position), color: color.red},
+            {index: this.hasRight(position) ? this.getRight(position) : -1, color: color.red}
+        ]}
     }
 
     getHeapifyStep(){

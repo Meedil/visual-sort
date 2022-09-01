@@ -10,20 +10,22 @@ interface step{
 } 
 
 export class mergeSort extends sorter{
-    sorted:boolean;
+    isSplit:boolean;
     stepStack:step[];
 
     constructor(){
         super();
         this.name = "Merge Sort";
-        this.sorted = false;
+        this.isSplit = false;
         this.stepStack = [];
     }
 
     executeStep() {
         if(this.stepStack.length === 0){
-            if(!this.isSorted())
+            if(!this.isSorted()){
                 this.splitArray();
+                this.isSplit = true;
+            }
             else
                 return {array: this.array};
         }
@@ -57,7 +59,7 @@ export class mergeSort extends sorter{
         let min:number;
 
         if(v1===undefined && v2===undefined){
-            if(this.stepStack.length === 0) {this.sorted = true;}
+            if(this.stepStack.length === 0) {this.isSplit = true;}
             
             return {array: [...this.array]};
         }
@@ -93,11 +95,12 @@ export class mergeSort extends sorter{
     }
 
     isSorted(): boolean {
-        return this.sorted;
+        return this.isSplit && this.stepStack.length === 0;
     }
 
     reset(): void {
+        super.reset();
         this.stepStack = [];
-        this.sorted = false;
+        this.isSplit = false;
     }
 }

@@ -3,6 +3,7 @@ import { sorter } from '../classes/sorter';
 import { SortAlgorithm } from '../classes/sorters';
 import { useState, useEffect } from 'react';
 import { maxTime, minTime } from './VisualSort';
+import { isSorted } from '../preparation';
 
 
 interface OptionsBarProps{
@@ -13,11 +14,12 @@ interface OptionsBarProps{
     setArraySize:Function, 
     timePerStep:number,
     setTimePerStep:Function,
-    resetArray:Function
+    resetArray:Function,
+    sorted: boolean,
 }
 
 export default function OptionsBar ({selectedSort, setSelectedSort, sorters, arraySize, setArraySize, timePerStep,
-setTimePerStep, resetArray}:OptionsBarProps){
+setTimePerStep, resetArray, sorted}:OptionsBarProps){
     const calculateSpeed = (time:number) => {
         let speed = (99*(time - maxTime) + (minTime-maxTime)) / (minTime - maxTime);
         return speed;
@@ -27,7 +29,7 @@ setTimePerStep, resetArray}:OptionsBarProps){
     const dropdownItems = 
     <div className={styles.dropdownItemsContainer}>{
         sorters.map((s:sorter, index:number) => {
-            return <div className={styles.dropdownItem + ' ' + (index === selectedSort ? styles.selectedDropdownItem : '')} onClick={() => setSelectedSort(index)}>{s.name}</div>
+            return <div className={styles.dropdownItem + ' ' + (index === selectedSort ? styles.selectedDropdownItem : '')} onClick={() => {if(index === selectedSort) return; setSelectedSort(index);}}>{s.name}</div>
         })
     }</div>
 
@@ -39,22 +41,20 @@ setTimePerStep, resetArray}:OptionsBarProps){
     useEffect(() => {
         const outOfDropdownHandler = (e) => {
             const dropdownButton = document.querySelector('.' + styles.selectedDropdownItem);
-            console.log('target: ', e.target);
-            console.log('dropdown: ', dropdownButton);
 
             if(e.target !== dropdownButton){
                 document.getElementById('sort-dropdown').setAttribute('data-dropped', 'false');
             }
         };
         window.addEventListener('click', outOfDropdownHandler);
-        return window.removeEventListener('click', outOfDropdownHandler);
-      }, []);
+        return () => window.removeEventListener('click', outOfDropdownHandler);
+      }, []); 
 
     const toggleSortDropdown = () => {
         const dropdown = document.getElementById('sort-dropdown');
         const dropped:boolean = dropdown.getAttribute('data-dropped') === "true";
         dropdown.setAttribute('data-dropped', String(!dropped));
-    }
+    } 
 
     return(
         <div className={styles.container}>
@@ -62,11 +62,11 @@ setTimePerStep, resetArray}:OptionsBarProps){
                 {dropdownItems}
             </div>
             <label htmlFor="array-size" className={styles.label}>Size of Array</label>
-            <input name='array-size' type="number" 
-                value={arraySize} 
+            <input name='array-size' type="number"
+                value={arraySize}
                 onChange={(e) => {setArraySize(e.target.value);}}
                 onKeyDown={(e) => {if(e.key.toLowerCase() === "enter"){resetArray()}}}
-                className={styles.arraySize} 
+                className={styles.arraySize}
             />
 
             <label htmlFor="time-per-step" className={styles.label}>Sorting Speed</label>

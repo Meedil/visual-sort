@@ -16,7 +16,7 @@ export class insertionSort extends sorter{
     }
 
     isSorted(): boolean {
-        return this.stepStack.i >= this.array.length;
+        return this.array !== undefined ? this.stepStack.i >= this.array.length : false;
     }
     
     jumpStep(){

@@ -25,13 +25,15 @@ export abstract class sorter{
 
     abstract executeStep(): sortResult;
     isSorted(): boolean{
-        return isSorted(this.array);
+        return this.array !== undefined ? isSorted(this.array) : false;
     };
     getCurrentStep?(): any;
 
     passArray(array:number[]): void{
         this.reset();
         this.array = array;
+        console.log('array passed to ' + this.name, this.array);
+        
     }
     _swap(index1:number, index2:number){
         const temp = this.array[index1];

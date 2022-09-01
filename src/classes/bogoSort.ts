@@ -9,7 +9,7 @@ export class bogoSort extends sorter{
     }
 
     executeStep() {
-        if(this.isSorted()) return {array: this.array};
+        if(this.isSorted()) return {array: this.array}; 
 
         let result = [...this.array];
         shuffle(result);
@@ -18,9 +18,6 @@ export class bogoSort extends sorter{
         return {array: result};
     }
 
-    isSorted(): boolean {
-        return isSorted(this.array);
-    }
     getCurrentStep() {
         
     }
