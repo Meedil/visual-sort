@@ -1,10 +1,21 @@
 *{
 
 }
+
+.radio{
+    height:fit-content;
+}
+
+.label, .sliderContainer{
+    height:fit-content;
+    vertical-align: top;
+}
+
 .container{
     display: flex;
     background-color: rgb(61, 52, 124);
     padding: 20px;
+    align-items: center;
     /* height: 50px; */
 }
 

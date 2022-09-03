@@ -1,4 +1,5 @@
-import { isSorted, shuffle } from "../preparation";
+import { color, colorTupple } from "../colors";
+import { shuffle } from "../utilities";
 import { sorter } from "./sorter";
 
 export class bogoSort extends sorter{
@@ -8,19 +9,28 @@ export class bogoSort extends sorter{
         this.name = "Bogosort";
     }
 
-    executeStep(): number[] {
-        if(this.isSorted()) return this.array;
+    executeStep() {
+        if(this.isSorted()) return {array: this.array}; 
 
         let result = [...this.array];
         shuffle(result);
         this.array = result;
-        this.arrayEditsCount += this.array.length;
-        return result;
+        this.stepCount++;
+        this.comparisonCount += this.array.length;
+
+        const colors:colorTupple[] = new Array(Math.floor(this.array.length/2));
+        for(let i = 0; i < this.array.length/2; i++){
+            colors[i] = {index: Math.floor(Math.random()*this.array.length), color: color.red};
+        }
+
+        return {
+            array: result, 
+            colors: colors,
+            stepCount: this.stepCount,
+            comparisonCount: this.comparisonCount
+        };
     }
 
-    isSorted(): boolean {
-        return isSorted(this.array);
-    }
     getCurrentStep() {
         
     }

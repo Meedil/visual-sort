@@ -1,5 +1,6 @@
 import { bogoSort } from "./bogoSort";
 import { bubbleSort } from "./bubbleSort";
+import { heapSort } from "./heapSort";
 import { insertionSort } from "./insertionSort";
 import { mergeSort } from "./mergeSort";
 import { quickSort } from "./quickSort";
@@ -12,7 +13,8 @@ export enum SortAlgorithm{
     selectionSort,
     bubblesort,
     quickSort,
-    mergeSort
+    mergeSort,
+    heapSort
 }
 
 const sorters:sorter[] = [];
@@ -23,5 +25,6 @@ sorters[SortAlgorithm.insertionSort] = new insertionSort();
 sorters[SortAlgorithm.selectionSort] = new selectionSort();
 sorters[SortAlgorithm.quickSort] = new quickSort();
 sorters[SortAlgorithm.mergeSort] = new mergeSort();
+sorters[SortAlgorithm.heapSort] = new heapSort();
 
 export default sorters;

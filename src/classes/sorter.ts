@@ -1,25 +1,29 @@
-import {isSorted } from '../preparation';
+import { colorTupple } from '../colors';
+import {isSorted } from '../utilities';
+interface sortResult{
+    array:number[],
+    colors?:colorTupple[],
+}
 
 export abstract class sorter{
     name: string;
     array?: number[];
     comparisonCount: number;
-    arrayEditsCount: number;
+    stepCount: number;
     stepStack?:any;
 
     constructor(){
-        this.comparisonCount = 0;
-        this.arrayEditsCount = 0;
+        this.reset();
     }
 
     reset():void{
         this.comparisonCount = 0;
-        this.arrayEditsCount = 0;
+        this.stepCount = 0;
     }
 
-    abstract executeStep(): number[];
+    abstract executeStep(): sortResult;
     isSorted(): boolean{
-        return isSorted(this.array);
+        return this.array !== undefined ? isSorted(this.array) : false;
     };
     getCurrentStep?(): any;
 
@@ -34,7 +38,7 @@ export abstract class sorter{
     }
     swap(index1:number,index2:number){
         this._swap(index1, index2);
-        this.arrayEditsCount += 2;
+        this.stepCount += 2;
     }
 }
 

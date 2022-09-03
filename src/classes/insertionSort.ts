@@ -1,3 +1,4 @@
+import { color, colorTupple } from "../colors";
 import { sorter } from "./sorter";
 
 //Insertion sort extra function
@@ -11,37 +12,51 @@ export function insertElement(array:any[], value:any, index:number){
 export class insertionSort extends sorter{
     constructor(){
         super();
-        this.stepStack = 1;
         this.name = "Insertion Sort";
     }
 
     isSorted(): boolean {
-        return this.stepStack > this.array.length;
+        return this.array !== undefined ? this.stepStack.i >= this.array.length : false;
     }
     
+    jumpStep(){
+        if(this.stepStack.j === 0) return;
+        this.stepStack.i++;
+        this.stepStack.j = 0;
+    }
+
     getCurrentStep() {
-        return this.stepStack++;
+        let current = {...this.stepStack}
+
+        this.stepStack.j = (this.stepStack.j+1) % this.stepStack.i;
+        this.stepStack.i += (+(this.stepStack.j===0));
+
+        return current;
     }
     
-    executeStep(): number[] {
-        if(this.isSorted()) return this.array;
+    executeStep() {
+        if(this.isSorted()) { return {array: this.array, colors: []}};
 
-        let i = this.getCurrentStep();
+        let {i, j} = this.getCurrentStep();
 
-        for(let j = 0; j < i; j++){
-            this.comparisonCount++;
-            if(this.array[j] > this.array[i]){
-                let temp = this.array.splice(i, 1);
-                this.array = insertElement(this.array, temp[0], j);
-                this.arrayEditsCount += 2;
-            }
+        this.comparisonCount++;
+        if(this.array[j] > this.array[i]){
+            let temp = this.array.splice(i, 1);
+            this.array = insertElement(this.array, temp[0], j);
+            this.stepCount += 2;
+            this.jumpStep();
         }
 
-        return [...this.array];
+        let colors:colorTupple[] =[
+            {index: j, color: color.red},
+            {index: i, color: color.green}
+        ]
+        
+        return {array: [...this.array], colors: colors};
     }
     
     reset(): void {
         super.reset();
-        this.stepStack = 1;
+        this.stepStack = {i: 1, j:0};
     }
 }
