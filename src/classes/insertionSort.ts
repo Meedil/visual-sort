@@ -35,7 +35,7 @@ export class insertionSort extends sorter{
     }
     
     executeStep() {
-        if(this.isSorted()) { console.log('done'); return {array: this.array, colors: []}};
+        if(this.isSorted()) { return {array: this.array, colors: []}};
 
         let {i, j} = this.getCurrentStep();
 
@@ -43,7 +43,7 @@ export class insertionSort extends sorter{
         if(this.array[j] > this.array[i]){
             let temp = this.array.splice(i, 1);
             this.array = insertElement(this.array, temp[0], j);
-            this.arrayEditsCount += 2;
+            this.stepCount += 2;
             this.jumpStep();
         }
 

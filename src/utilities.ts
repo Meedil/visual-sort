@@ -47,8 +47,6 @@ export const isSorted = (array:number[], ascending = true) => {
         for(let i = 0; i < array.length; i++) array[i] = Math.floor(Math.random()*(n-1) + 1);
     }
 
-    console.log(array);
-    
     return array;
 }
 

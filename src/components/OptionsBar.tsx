@@ -3,7 +3,7 @@ import { sorter } from '../classes/sorter';
 import { SortAlgorithm } from '../classes/sorters';
 import { useState, useEffect } from 'react';
 import { maxTime, minTime } from './VisualSort';
-import { isSorted } from '../preparation';
+import { isSorted } from '../utilities';
 
 
 interface OptionsBarProps{
@@ -16,10 +16,13 @@ interface OptionsBarProps{
     setTimePerStep:Function,
     resetArray:Function,
     sorted: boolean,
+
+    oneToN:boolean,
+    setOneToN:Function,
 }
 
 export default function OptionsBar ({selectedSort, setSelectedSort, sorters, arraySize, setArraySize, timePerStep,
-setTimePerStep, resetArray, sorted}:OptionsBarProps){
+setTimePerStep, resetArray, sorted, oneToN, setOneToN}:OptionsBarProps){
     const calculateSpeed = (time:number) => {
         let speed = (99*(time - maxTime) + (minTime-maxTime)) / (minTime - maxTime);
         return speed;
@@ -61,6 +64,7 @@ setTimePerStep, resetArray, sorted}:OptionsBarProps){
             <div id='sort-dropdown' data-dropped="false" className={styles.dropdownContainer} onClick={() => toggleSortDropdown()}>
                 {dropdownItems}
             </div>
+
             <label htmlFor="array-size" className={styles.label}>Size of Array</label>
             <input name='array-size' type="number"
                 value={arraySize}
@@ -69,8 +73,15 @@ setTimePerStep, resetArray, sorted}:OptionsBarProps){
                 className={styles.arraySize}
             />
 
+            <label htmlFor="oneToN-on" className={styles.label}>One To N</label> 
+            <input className={styles.radio} type="radio" name="oneToN" id="oneToN-on" value="true"  onChange={() => setOneToN(true)} checked={oneToN}/>
+            <label htmlFor="oneToN-off" className={styles.label}>Random from Range</label> 
+            <input className={styles.radio} type="radio" name="oneToN" id="oneToN-off" value="false" onChange={() => setOneToN(false)} checked={!oneToN}/>
+
             <label htmlFor="time-per-step" className={styles.label}>Sorting Speed</label>
-            <div className={styles.sliderContainer}><input type="range" name="array-size" min="1" max="100" id="timePerStepSlider" className={styles.slider} value={speed} onInput={(e) => {setSpeed(parseInt((document.getElementById("timePerStepSlider") as HTMLInputElement).value))}}/></div>
+            <div className={styles.sliderContainer}>
+                <input type="range" name="array-size" min="1" max="100" id="timePerStepSlider" className={styles.slider} value={speed} onInput={(e) => {setSpeed(parseInt((document.getElementById("timePerStepSlider") as HTMLInputElement).value))}}/>
+            </div>
         </div>  
     )
 }

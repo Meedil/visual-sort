@@ -5,13 +5,15 @@ class step{
     start:number;
     end:number;
     pivot:number;
-    left:number;
-    right:number;
+    low:number;
+    i:number;
 
-    constructor(start:number, end:number, pivot?:number, left?:number, right?:number){
-        this.start = start; this.left = left === undefined ? start : left;
-        this.end = end; this.right = right === undefined ? end : right;
-        this.pivot = pivot === undefined ? Math.floor((start+end)/2) : pivot;
+    constructor(start:number, end:number, low?:number, pivot?:number, i?:number){
+        this.start = start;
+        this.i = i === undefined ? start : i;
+        this.end = end;
+        this.pivot = pivot === undefined ? end : pivot;
+        this.low = low === undefined ? start-1 : low;
     }
 }
 
@@ -22,52 +24,41 @@ export class quickSort extends sorter{
         super();
 
         this.name = "Quick Sort";
-        this.stepStack = [];
     }
 
     executeStep() {
-        let changed = false;
+        if(this.isSorted()) return {array: this.array}
 
-        
         let s = this.getCurrentStep();
-        let {start, end, pivot: mid, left, right} = s;
-        let pivot = this.array[mid];
+        let {start, end, low, pivot, i} = s;
         
-        const colors:colorTupple[] =[
-            {index: mid, color: color.green},
-            {index: left, color: color.red},
-            {index: right, color: color.red},
-        ]
-
-        if(start >= end)
+        if(start >= end){
             return {array: [...this.array]};
-        
-
-        if(left < mid || right > mid){
-            let moveLeft = () => this.array[left] < pivot;
-            let moveRight = () => this.array[right] > pivot;
-
-            if(!(moveRight() || moveLeft())){
-                if(left === mid) mid = right;
-                else if(right === mid) mid = left;
-
-                this.swap(left, right);
-                changed = true;
-            }
-
-            if(moveLeft())
-                left++;
-            
-            if(moveRight())
-                right--;
-
-            this.stepStack.push(new step(start, end, mid, left, right))
-        }else if(left === mid && right === mid){
-            this.stepStack.push(new step(mid+1, end))
-            this.stepStack.push(new step(start, mid-1))
         }
 
-        return {array: [...this.array], colors: colors};
+        if(i<pivot){    //Partition-step if i < pivot
+            this.comparisonCount++;
+            
+            if(this.array[i] < this.array[pivot]){
+                low++;
+                this.swap(i, low);
+            }
+            
+            this.pushStep(new step(start, end, low, pivot, ++i));
+        } 
+        else if(i===pivot){   //When partition ends
+            this.swap(low+1, pivot);
+            pivot = low+1;
+            
+            this.pushStep(new step(pivot+1, end));
+            this.pushStep(new step(start, low));
+        }
+        
+        return {array: [...this.array], colors:[
+            {index: i, color: color.red},
+            {index: pivot, color: color.green},
+            {index: low+1, color: color.red}
+        ]};
     }
 
     isSorted(): boolean {

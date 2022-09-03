@@ -1,21 +1,21 @@
 import { StyleSheet, css } from "aphrodite";
-import { useState } from "react";
-import { color as C} from '../colors';
+import { SortAlgorithm } from "../classes/sorters";
 
 interface ValueBarProps{
     height: number;
     gap: number;    
     first: boolean;
     color: object;
+    selectedSort: SortAlgorithm;
 }
 
-export const ValueBar = ({height, gap, first, color}:ValueBarProps) => {
+export const ValueBar = ({height, gap, first, color, selectedSort}:ValueBarProps) => {
 
     const style = StyleSheet.create({
         default:{
             width: "100%",
             marginLeft: !first ? gap + "%" : 0,
-            transition:'height 100ms'
+            transition: selectedSort !== SortAlgorithm.bogoSort ? 'height 100ms' : 'height 10ms'
         },
         h:{
             height: height + '%',
