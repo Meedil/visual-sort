@@ -1,0 +1,19 @@
+.cleanScrollBar::-webkit-scrollbar{
+    left: -4px;
+    margin-left: -4px;
+    width: 4px;
+}
+.cleanScrollBar::-webkit-scrollbar-button{
+    display: none;
+}
+.cleanScrollBar::-webkit-scrollbar-thumb{
+    border-radius: 2px;
+    background-color: #222;
+    margin-left: -4px;
+    left: -4px;
+}
+.cleanScrollBar::-webkit-scrollbar-track{
+    background: transparent;
+    margin-left: -4px;
+    left: -4px;
+}

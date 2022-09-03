@@ -1,6 +1,6 @@
 import { colorTupple } from '../colors';
 import {isSorted } from '../utilities';
-interface sortResult{
+export interface sortResult{
     array:number[],
     colors?:colorTupple[],
 }

@@ -35,7 +35,7 @@ export const isSorted = (array:number[], ascending = true) => {
  * @param {boolean} oneToN array values should be all values form 1 to n
  * @param {range | undefined} numRange range of the random numbers if oneToN is false
  */
- const generateArray = (n:number, oneToN:boolean = true) => {
+const generateArray = (n:number, oneToN:boolean = true) => {
     let array:number[] = new Array(n ? parseInt(n.toString()) : 1);
     
     if(oneToN){
