@@ -1,4 +1,19 @@
-# Getting Started with Create React App
+# Sorting Algorithm Visualization Web App
+
+## Covered Algorithms
+- Bubble Sort
+- Selection Sort
+- Insertion Sort
+- Quick Sort
+- Merge Sort
+- Heap Sort
+
+## Instructions
+1. Pick a sorting algorithm
+2. Enter an array size
+3. Use the speed slider to choose your speed
+4. Click sort
+5. Watch the magic happen
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
