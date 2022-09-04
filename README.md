@@ -7,6 +7,8 @@
 - Quick Sort
 - Merge Sort
 - Heap Sort
+- Shell Sort
+- Radix Sort
 
 ## Instructions
 1. Pick a sorting algorithm
