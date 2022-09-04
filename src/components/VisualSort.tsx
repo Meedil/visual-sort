@@ -19,11 +19,11 @@ interface visualSortState{
     selectedSort?:SortAlgorithm,
 }
 
-export const maxTime = 200, minTime = .5;
+export const maxTime = 200, minTime = 1;
 
 
 const loadedSort:SortAlgorithm = localStorage.getItem("selectedSort") == null ? 0 : parseInt(localStorage.getItem("selectedSort"));
-const loadedArraySize:number = localStorage.getItem("arraySize") == null ? 5 : parseInt(localStorage.getItem("arraySize"));
+const loadedArraySize:number = localStorage.getItem("arraySize") == null ? 20 : parseInt(localStorage.getItem("arraySize"));
 const initialArray = generateArray(loadedArraySize, false);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const loadedTimePerStep:number = localStorage.getItem("timePerStep") == null ? 100 : parseInt(localStorage.getItem("timePerStep"));
@@ -141,7 +141,7 @@ export default function VisualSort(props){
                 timePerStep={timePerStep}
                 setTimePerStep={speed => setTimePerStep(Math.round(calculateTimePerStep(speed)))} 
                 resetArray={() => {reset()}}
-                sorted = {sorted}
+                sorting = {isSorting}
                 oneToN = {oneToN}
                 setOneToN = {(otn) => setOneToN(otn)}
             />

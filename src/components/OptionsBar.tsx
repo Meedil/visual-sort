@@ -15,14 +15,14 @@ interface OptionsBarProps{
     timePerStep:number,
     setTimePerStep:Function,
     resetArray:Function,
-    sorted: boolean,
+    sorting: boolean,
 
     oneToN:boolean,
     setOneToN:Function,
 }
 
 export default function OptionsBar ({selectedSort, setSelectedSort, sorters, arraySize, setArraySize, timePerStep,
-setTimePerStep, resetArray, sorted, oneToN, setOneToN}:OptionsBarProps){
+setTimePerStep, resetArray, sorting, oneToN, setOneToN}:OptionsBarProps){
     const calculateSpeed = (time:number) => {
         let speed = (99*(time - maxTime) + (minTime-maxTime)) / (minTime - maxTime);
         return speed;
