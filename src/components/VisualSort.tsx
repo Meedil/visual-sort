@@ -19,7 +19,7 @@ interface visualSortState{
     selectedSort?:SortAlgorithm,
 }
 
-export const maxTime = 200, minTime = 1;
+export const maxTime = 200, minTime = .5;
 
 
 const loadedSort:SortAlgorithm = localStorage.getItem("selectedSort") == null ? 0 : parseInt(localStorage.getItem("selectedSort"));

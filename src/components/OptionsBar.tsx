@@ -30,7 +30,7 @@ setTimePerStep, resetArray, sorted, oneToN, setOneToN}:OptionsBarProps){
     const [speed, setSpeed] = useState(calculateSpeed(timePerStep));
 
     const dropdownItems = 
-    <div className={styles.dropdownItemsContainer}>{
+    <div className={styles.dropdownItemsContainer+" cleanScrollBar"}>{
         sorters.map((s:sorter, index:number) => {
             return <div className={styles.dropdownItem + ' ' + (index === selectedSort ? styles.selectedDropdownItem : '')} onClick={() => {if(index === selectedSort) return; setSelectedSort(index);}}>{s.name}</div>
         })
