@@ -3,18 +3,17 @@ import { SortAlgorithm } from "../classes/sorters";
 
 interface ValueBarProps{
     height: number;
-    gap: number;    
-    first: boolean;
+    // gap: number;    
+    // first: boolean;
     color: object;
     selectedSort: SortAlgorithm;
 }
 
-export const ValueBar = ({height, gap, first, color, selectedSort}:ValueBarProps) => {
+export const ValueBar = ({height, color, selectedSort}:ValueBarProps) => {
 
     const style = StyleSheet.create({
         default:{
             width: "100%",
-            marginLeft: !first ? gap + "%" : 0,
             transition: selectedSort !== SortAlgorithm.bogoSort ? 'height 100ms' : 'height 10ms'
         },
         h:{

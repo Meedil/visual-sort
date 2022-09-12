@@ -8,6 +8,7 @@ import generateArray, { isSorted } from "../utilities";
 import sorters, { SortAlgorithm } from "../classes/sorters";
 
 import styles from "./VisualSort.module.css";
+import { OptionsBanner } from "./OptionsBanner";
 
 interface visualSortState{
     array?: number[],               //Array on display
@@ -19,7 +20,7 @@ interface visualSortState{
     selectedSort?:SortAlgorithm,
 }
 
-export const maxTime = 200, minTime = 1;
+export const maxTime = 200, minTime = 0.1;
 
 
 const loadedSort:SortAlgorithm = localStorage.getItem("selectedSort") == null ? 0 : parseInt(localStorage.getItem("selectedSort"));
@@ -35,6 +36,8 @@ export default function VisualSort(props){
     const [selectedSort, setSelectedSort] = useState(loadedSort); 
     const [timePerStep, setTimePerStep] = useState(loadedTimePerStep);
     const [oneToN, setOneToN] = useState(loadedOneToN);
+    const [generationRangeMin, setGenerationRangeMin] = useState(1);
+    const [generationRangeMax, setGenerationRangeMax] = useState(loadedArraySize);
     //SORTING STATE VARIABLES
     const [array, setArray] = useState(initialArray);
     const [colors, setColors] = useState([])
@@ -95,7 +98,7 @@ export default function VisualSort(props){
         // setArray(sorters[selectedSort].executeStep());
     }
 
-    const reset = () => {
+    const reset = () => {        
         const newArray = autoGenerateArray();
         setState({
             array: newArray, 
@@ -127,25 +130,32 @@ export default function VisualSort(props){
     }
 
     const autoGenerateArray = () => {
-        return generateArray(arraySize, oneToN);
+        return generateArray(arraySize, oneToN, generationRangeMin, generationRangeMax);
     }
     
     return(
         <>
-            <OptionsBar 
-                setSelectedSort={(sort:SortAlgorithm) => selectSort(sort)} 
-                selectedSort={selectedSort} 
-                sorters={sorters} 
-                arraySize={arraySize} 
-                setArraySize={(size:number) => setArraySize(size)} 
-                timePerStep={timePerStep}
-                setTimePerStep={speed => setTimePerStep(Math.round(calculateTimePerStep(speed)))} 
-                resetArray={() => {reset()}}
-                sorting = {isSorting}
-                oneToN = {oneToN}
-                setOneToN = {(otn) => setOneToN(otn)}
+            <OptionsBanner
+                selectedSort={selectedSort}
+                selectSort={(sort) => {selectSort(sort);}}
+                arraySize={arraySize}
+                setArraySize={(size) => setArraySize(size)}
+                reset={() => reset()}
+                setTimePerStep={(time) => {setTimePerStep(time);}}
+                oneToN={oneToN}
+                setOneToN={(value) => {setOneToN(value); if(value){setGenerationRangeMax(arraySize)}}}
+                generationRangeMin={generationRangeMin}
+                generationRangeMax={generationRangeMax}
+                setGenerationRangeMin={setGenerationRangeMin}
+                setGenerationRangeMax={setGenerationRangeMax}
+                disabled={isSorting}
             />
-            <ArrayVisualizer array={array} colors={colors} selectedSort={selectedSort}/>
+            <ArrayVisualizer 
+                array={array} 
+                colors={colors} 
+                selectedSort={selectedSort}
+                max={generationRangeMax}
+            />
             <div className={styles.buttonContainer}>
                 <button className={`${styles.btn} ${styles.sortBtn} ${styles.primaryBtn}`} onClick={() => startSort()} disabled={isSorting || sorted}>SORT</button>
                 <div className={styles.countDisplay}>Number of comparisons: {comparisonCount}</div>
