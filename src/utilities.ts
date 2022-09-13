@@ -38,7 +38,8 @@ export const isSorted = (array:number[], ascending = true) => {
  */
 const generateArray = (n:number, oneToN:boolean = true, min:number = 1, max?:number) => {
     let array:number[] = new Array(n ? parseInt(n.toString()) : 1);
-    if(max === undefined || max <= min) max = n;
+    max ??= n;
+    if(max < min) max = min+1;
     
     if(oneToN){
         for (let i = 0; i < array.length; i++) {

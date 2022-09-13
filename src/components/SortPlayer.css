@@ -1,0 +1,42 @@
+.player-container{
+    width:100%;
+}
+.player{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    margin: 0 auto;
+    width:200px;
+}
+.player-btn{
+    position: relative;
+    border: none;
+    background-color: #777;
+    border-radius: 100%;
+    width: 40px; height: 40px;
+    font-size: large;
+    color: white;
+    cursor: pointer;
+}
+.player-btn:disabled{
+    background-color: #bbb;
+    cursor:no-drop;
+}
+.btn-content{
+    position:absolute;
+    top: 50%; left:50%;
+    transform: translate(-50%, -41%);
+    width:fit-content;
+}
+
+.play-pause-btn{
+    width: 60px;
+    height: 60px;
+    font-size: x-large;
+}
+.play-btn-content{
+    left: 50%;
+    top: 50%;
+    transform: translate(-40%, -41%);
+}

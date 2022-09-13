@@ -9,6 +9,7 @@ import sorters, { SortAlgorithm } from "../classes/sorters";
 
 import styles from "./VisualSort.module.css";
 import { OptionsBanner } from "./OptionsBanner";
+import { SortPlayer } from "./SortPlayer";
 
 interface visualSortState{
     array?: number[],               //Array on display
@@ -43,7 +44,7 @@ export default function VisualSort(props){
     const [colors, setColors] = useState([])
     const [comparisonCount, setCount] = useState(0);
     const [stepCount, setChangeCount] = useState(0);
-    const [isSorting, setSorting] = useState(false);
+    const [isSorting, setIsSorting] = useState(false);
     const [sorted, setSorted] = useState(false);
 
     const setState = ({array, colors, comparisonCount: count, stepCount: changeCount, isSorting, selectedSort}:visualSortState) => {
@@ -52,7 +53,7 @@ export default function VisualSort(props){
         (colors !== undefined) && setColors(colors);
         (count !== undefined) && setCount(count);
         (changeCount !== undefined) && setChangeCount(changeCount);
-        (isSorting !== undefined) && setSorting(isSorting);
+        (isSorting !== undefined) && setIsSorting(isSorting);
         //Options state-vars
         (selectedSort !== undefined) && setSelectedSort(selectedSort);
     }
@@ -68,7 +69,7 @@ export default function VisualSort(props){
                 setState(sorters[selectedSort].executeStep());
             }
         }, timePerStep);
-        if(sorters[selectedSort].isSorted()) {setColors([]); setSorting(false); setSorted(true)} 
+        if(sorters[selectedSort].isSorted()) {setColors([]); setIsSorting(false); setSorted(true)} 
     }, [isSorting, array]);
 
     //on load get from local storage
@@ -94,8 +95,16 @@ export default function VisualSort(props){
     },[oneToN])
 
     const startSort = () => {
-        setSorting(true);
-        // setArray(sorters[selectedSort].executeStep());
+        setIsSorting(true);
+        
+    }
+
+    const toggleSorting = () => {
+        setIsSorting(!isSorting);
+    }
+
+    const nextStep =() => {
+        setState(sorters[selectedSort].executeStep());
     }
 
     const reset = () => {        
@@ -156,12 +165,13 @@ export default function VisualSort(props){
                 selectedSort={selectedSort}
                 max={generationRangeMax}
             />
-            <div className={styles.buttonContainer}>
-                <button className={`${styles.btn} ${styles.sortBtn} ${styles.primaryBtn}`} onClick={() => startSort()} disabled={isSorting || sorted}>SORT</button>
-                <div className={styles.countDisplay}>Number of comparisons: {comparisonCount}</div>
-                <div className={styles.countDisplay} >Number of steps: {stepCount}</div> 
-                <button className={`${styles.btn} ${styles.resetBtn} ${styles.primaryBtn}`} onClick={() => {reset()}}>RESET</button>
-            </div>
+            <SortPlayer
+                isSorted={sorted}
+                isSorting={isSorting}
+                toggleSorting={toggleSorting}
+                nextStep={nextStep}
+                reset={reset}
+            />
         </>
     )
 }
