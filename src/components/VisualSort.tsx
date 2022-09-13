@@ -115,9 +115,9 @@ export default function VisualSort(props){
             comparisonCount: 0, 
             stepCount: 0, 
             isSorting: false,
-            extraData: {}
         });
-        
+
+        if(oneToN){setGenerationRangeMax(arraySize);}
         setSorted(isSorted(newArray));
         sorters[selectedSort].reset();
         sorters[selectedSort].passArray(newArray);
