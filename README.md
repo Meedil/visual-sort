@@ -17,6 +17,11 @@
 4. Click sort
 5. Watch the magic happen
 
+### Keybinds:
+- *R* to reset
+- *Space* to start or pause sorting
+- *Right arrow* or *D* to carry out only one step
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
