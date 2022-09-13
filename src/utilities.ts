@@ -33,10 +33,13 @@ export const isSorted = (array:number[], ascending = true) => {
  * Generates random array
  * @param {number} n size of array
  * @param {boolean} oneToN array values should be all values form 1 to n
- * @param {range | undefined} numRange range of the random numbers if oneToN is false
+ * @param {number} min minimum for range of the random numbers if oneToN is false
+ * @param {number} max maximum for range of the random numbers if oneToN is false
  */
-const generateArray = (n:number, oneToN:boolean = true) => {
+const generateArray = (n:number, oneToN:boolean = true, min:number = 1, max?:number) => {
     let array:number[] = new Array(n ? parseInt(n.toString()) : 1);
+    max ??= n;
+    if(max < min) max = min+1;
     
     if(oneToN){
         for (let i = 0; i < array.length; i++) {
@@ -44,7 +47,8 @@ const generateArray = (n:number, oneToN:boolean = true) => {
         }
         array = shuffle(array);
     } else {
-        for(let i = 0; i < array.length; i++) array[i] = Math.floor(Math.random()*(n-1) + 1);
+        for(let i = 0; i < array.length; i++) array[i] = Math.floor(Math.random()*(max-min)) + min;
+        console.log(array)
     }
 
     return array;

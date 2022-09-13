@@ -50,6 +50,10 @@
 .selectedDropdownItem:hover{
     color:white
 }
+#sort-dropdown[data-dropped="false"] .selectedDropdownItem:hover{
+    color: black;
+    background: #efefef;
+}
 .selectedDropdownItem{
     background-color: #efefef;
     color: black;

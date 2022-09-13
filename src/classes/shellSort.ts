@@ -22,7 +22,7 @@ export class shellSort extends sorter{
 
         const colors:colorTupple[]  = Array(Math.floor(i/gap) + +(i%gap>0));
         let pos = 0;
-        for(let j = i; j > 0; j-=gap){
+        for(let j = i; j >= 0; j-=gap){
             colors[pos] = {index: j, color: color.red}
             pos++;
         }
@@ -49,6 +49,7 @@ export class shellSort extends sorter{
     passArray(array: number[]): void {
         super.passArray(array);
         this.step.gap = Math.floor(array.length/2);
+        this.step.i = this.step.gap;
     }
     reset(): void {
         this.step = {gap: 0, i: 0, j: 0}
