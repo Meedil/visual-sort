@@ -11,10 +11,12 @@
     color: white;
 }
 
-#sort-select option{
-    margin: 4px auto;
+#sort-select{
+    padding: 4px auto;
 }
-
+.array-size-label, .speed-label{
+    margin-right: 13px;  
+}
 .tooltip-text{
     opacity:0;
     display: inline-block;

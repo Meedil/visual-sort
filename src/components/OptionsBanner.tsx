@@ -9,7 +9,7 @@ import { maxTime, minTime } from "./VisualSort";
 function ArraySizeInput({arraySize, setArraySize, reset}){
     return(
         <div className="option-field array-size-field">
-            <label htmlFor="array-input">Array Size</label>
+            <label htmlFor="array-input" className='array-size-label'>Array Size </label>
             <input type="number" value={arraySize} onChange={e => setArraySize(e.target.value)} onKeyDown={(e) => {if(e.key.toLowerCase() === "enter") {reset();}}}/>
         </div>
     )
@@ -84,9 +84,10 @@ interface OptionsBannerProps{
 }
 
 export function OptionsBanner({selectedSort, selectSort, arraySize, setArraySize, oneToN, setOneToN, setTimePerStep, disabled, reset, ...props}:OptionsBannerProps){
+
     const algorithmDropdown = <select className="option-field" name="sort-select" id="sort-select" value={selectedSort} onChange={(e) => {selectSort(e.target.value)}} disabled={disabled}>
         {sorters.map((s:sorter, index:number) => {
-            return <option value={index} key={s.name}>{s.name}</option>
+            return <option className='option' value={index} key={s.name}>{s.name}</option>
         })}
     </select>
 
