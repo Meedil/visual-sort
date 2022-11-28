@@ -2,12 +2,10 @@
 import { useEffect, useState } from "react";
 import ArrayVisualizer from "./ArrayVisualizer";
 import { colorTupple } from "../colors";
-import OptionsBar from "./OptionsBar";
 
 import generateArray, { isSorted } from "../utilities";
 import sorters, { SortAlgorithm } from "../classes/sorters";
 
-import styles from "./VisualSort.module.css";
 import { OptionsBanner } from "./OptionsBanner";
 import { SortPlayer } from "./SortPlayer";
 
