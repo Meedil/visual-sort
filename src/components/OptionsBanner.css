@@ -13,7 +13,14 @@
 .option-field{
     display: flex;
     justify-content: start;
+    align-items: center;
+    padding: 10px 4px;
 }
+.option-field:not(:nth-child(1)){
+    border-top: solid 2px #999;
+}
+
+
 .field-label{
     flex-basis: 100px;
 }
@@ -26,55 +33,24 @@
     background-color: #444;
     color: white;
 }
+.array-size-field{
+    margin-top: 20px;
+}
 .array-size-label, .speed-label{
     margin-right: 13px;  
 }
-.tooltip-text{
-    opacity:0;
-    display: inline-block;
-    position:absolute; left: 10px;
-
-    color: white;
-    padding: 3px 10px;
-    background-color: #444;
-    transition-delay: 0s;
-    transition-duration: 0.2s;
-}
-.tooltip:hover .tooltip-text{
-    opacity: 1;
-    transition-delay: 0.5s;
+.option-field label{
+    user-select: none;
 }
 
-.values-field{
-    position: relative;
-}
 
-.random-values{
+.option-input{
     display: flex;
-    justify-content: left;
+    gap: 30px;
+}
+.option-input .radio-input{
+    display: flex;
     align-items: center;
-}
-
-.range-input div{
-    display: flex;
-    background-color: #ddd;
-    justify-content: space-between;
-}
-.range-input label{
-    width: fit-content;
-    margin-right: 10px;
-}
-.range-number{
-    width: 70px;
-}
-
-.oneToN-option{
-    margin-right: 10px;
-}
-.one-to-n{
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-    border-bottom: solid 2px black;
 }
 
 #sorting-speed{
@@ -100,14 +76,13 @@
     
     flex-basis: 100%;
     flex-grow: 1;
+    /* transition-duration: height 300ms; */
 }
 
-/* .collapse-container:not(.show){
-    display: none;
-} */
 body{
     --height: 0;
 }
+
 .h-0{
     height: var(--height) !important;
     transition-duration: 300ms;
@@ -115,11 +90,11 @@ body{
 
 .show{
     display: block !important;
+    transition-duration: 300ms;
 }
 
 .h-fit{
-    height: fit-content;
-    transition-duration: 300ms;
+    height: fit-content !important;
 }
 
 @media (width >= 800px) {
@@ -144,5 +119,8 @@ body{
     }
     .option-field input:not([type="radio"]){
         flex-basis: auto;
+    }
+    .option-field{
+        margin: 0 0;
     }
 }

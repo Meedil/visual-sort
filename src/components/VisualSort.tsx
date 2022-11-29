@@ -10,31 +10,31 @@ import { OptionsBanner } from "./OptionsBanner";
 import { SortPlayer } from "./SortPlayer";
 
 interface visualSortState{
-    array?: number[],               //Array on display
-    colors?: colorTupple[],         //Holds colors for different 
-    comparisonCount?: number,                 //Number of comparisons 
-    stepCount?:number,            //Number of steps done
-    isSorting?: boolean,            //Status of whether or not sorting is currently ongoing
+    array?: number[],            
+    colors?: colorTupple[],      
+    comparisonCount?: number,    
+    stepCount?:number,           
+    isSorting?: boolean,         
     extraData?: any
     selectedSort?:SortAlgorithm,
 }
 
 export const maxTime = 200, minTime = 0.1;
 
-
+//TODO: move local storage loading to a custom hook
+// ---------- LOADING DATA FROM LOCAL STORAGE ----------
 const loadedSort:SortAlgorithm = localStorage.getItem("selectedSort") == null ? 0 : parseInt(localStorage.getItem("selectedSort"));
 const loadedArraySize:number = localStorage.getItem("arraySize") == null ? 20 : parseInt(localStorage.getItem("arraySize"));
 const initialArray = generateArray(loadedArraySize, false);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const loadedTimePerStep:number = localStorage.getItem("timePerStep") == null ? 100 : parseInt(localStorage.getItem("timePerStep"));
 const loadedOneToN:boolean = localStorage.getItem("oneToN") == null ? true : (localStorage.getItem("oneToN") === "true");
 
-export default function VisualSort(props){
+export default function VisualSort(){
     //OPTION STATE VARIABLES
     const [arraySize, setArraySize] = useState<number>(loadedArraySize);
     const [selectedSort, setSelectedSort] = useState(loadedSort); 
     const [timePerStep, setTimePerStep] = useState(loadedTimePerStep);
-    const [oneToN, setOneToN] = useState(loadedOneToN);
+    const [consecutiveGeneration, setConsecutiveGeneration] = useState(loadedOneToN);
     const [generationRangeMin, setGenerationRangeMin] = useState(1);
     const [generationRangeMax, setGenerationRangeMax] = useState(loadedArraySize);
     //SORTING STATE VARIABLES
@@ -89,12 +89,11 @@ export default function VisualSort(props){
     }, [timePerStep]);
     useEffect(() => {   //update oneToN in localstorage
         reset(); 
-        localStorage.setItem("oneToN", String(oneToN));
-    },[oneToN])
+        localStorage.setItem("oneToN", String(consecutiveGeneration));
+    },[consecutiveGeneration])
 
     const startSort = () => {
         setIsSorting(true);
-        
     }
 
     const toggleSorting = () => {
@@ -115,7 +114,7 @@ export default function VisualSort(props){
             isSorting: false,
         });
 
-        if(oneToN){setGenerationRangeMax(arraySize);}
+        if(consecutiveGeneration){setGenerationRangeMax(arraySize);}
         setSorted(isSorted(newArray));
         sorters[selectedSort].reset();
         sorters[selectedSort].passArray(newArray);
@@ -137,7 +136,7 @@ export default function VisualSort(props){
     }
 
     const autoGenerateArray = () => {
-        return generateArray(arraySize, oneToN, generationRangeMin, generationRangeMax);
+        return generateArray(arraySize, consecutiveGeneration, generationRangeMin, generationRangeMax);
     }
     
     return(
@@ -149,12 +148,11 @@ export default function VisualSort(props){
                 setArraySize={(size) => setArraySize(size)}
                 reset={() => reset()}
                 setTimePerStep={(time) => {setTimePerStep(time);}}
-                oneToN={oneToN}
-                setOneToN={(value) => {setOneToN(value); if(value){setGenerationRangeMax(arraySize)}}}
-                generationRangeMin={generationRangeMin}
-                generationRangeMax={generationRangeMax}
-                setGenerationRangeMin={setGenerationRangeMin}
-                setGenerationRangeMax={setGenerationRangeMax}
+                consecutiveGeneration={consecutiveGeneration}
+                setConsecutiveGeneration={(value) => {
+                    setConsecutiveGeneration(value); 
+                    if(value){setGenerationRangeMax(arraySize)}
+                }}
                 disabled={isSorting}
             />
             <ArrayVisualizer 

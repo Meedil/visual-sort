@@ -1,5 +1,5 @@
 import './OptionsBanner.css';
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { sorter } from "../classes/sorter";
 import sorters, { SortAlgorithm } from "../classes/sorters";
 import menuIcon from '../icons/bars-solid.svg';
@@ -39,41 +39,51 @@ function SpeedSlider({setTimePerStep}){
     )
 }
 
-function ValueOptions({oneToN, setOneToN, generationRangeMin, generationRangeMax, setGenerationRangeMin, setGenerationRangeMax, reset}){
-    return(
-        <div className="options-field values-field">
-            <div className='one-to-n'>
-                <div className="tooltip">
-                    <input type="radio" name="oneToN" id="oneToN-on" checked={oneToN} onChange={() => setOneToN(true)} className="oneToN-option"/>
-                    <label htmlFor="oneToN-on">1, 2, 3... <em>n</em></label>
-                    <div className="tooltip-text"><em>n </em>is the array size</div>
-                </div>
-            </div>
-            <div className='random-values'>
-                <div>
-                    <input type="radio" name="oneToN" id="oneToN-off" checked={!oneToN} onChange={() => setOneToN(false)} className="oneToN-option"/>
-                </div>
-                <label htmlFor='oneToN-off' className='range-input'>
-                    <div>
-                        <label htmlFor="range-min">from </label>
-                        <input className='range-number' type="number" min={1} value={generationRangeMin} onChange={e => setGenerationRangeMin(parseInt(e.target.value))} id="range-min" disabled={oneToN} onKeyDown={(e) => {if(e.key.toLowerCase()==="enter"){reset()}}}/>
-                    </div>
-                    <div>
-                        <label htmlFor="range-max">to </label>
-                        <input className="range-number" type="number" min={generationRangeMin} value={generationRangeMax} onChange={e => setGenerationRangeMax(parseInt(e.target.value))} id="range-max" disabled={oneToN} onKeyDown={(e) => {if(e.key.toLowerCase()==="enter"){reset()}}}/>
-                    </div>
-                </label>
-            </div>
-        </div>
-    )
-}
+// function ValueOptions({oneToN, setOneToN, generationRangeMin, generationRangeMax, setGenerationRangeMin, setGenerationRangeMax, reset}){
+//     return(
+//         <div className="options-field values-field">
+//             <div className='one-to-n'>
+//                 <div className="tooltip">
+//                     <input type="radio" name="oneToN" id="oneToN-on" checked={oneToN} onChange={() => setOneToN(true)} className="oneToN-option"/>
+//                     <label htmlFor="oneToN-on">1, 2, 3... <em>n</em></label>
+//                     <div className="tooltip-text"><em>n </em>is the array size</div>
+//                 </div>
+//             </div>
+//             <div className='random-values'>
+//                 <div>
+//                     <input type="radio" name="oneToN" id="oneToN-off" checked={!oneToN} onChange={() => setOneToN(false)} className="oneToN-option"/>
+//                 </div>
+//                 <label htmlFor='oneToN-off' className='range-input'>
+//                     <div>
+//                         <label htmlFor="range-min">from </label>
+//                         <input className='range-number' type="number" min={1} value={generationRangeMin} onChange={e => setGenerationRangeMin(parseInt(e.target.value))} id="range-min" disabled={oneToN} onKeyDown={(e) => {if(e.key.toLowerCase()==="enter"){reset()}}}/>
+//                     </div>
+//                     <div>
+//                         <label htmlFor="range-max">to </label>
+//                         <input className="range-number" type="number" min={generationRangeMin} value={generationRangeMax} onChange={e => setGenerationRangeMax(parseInt(e.target.value))} id="range-max" disabled={oneToN} onKeyDown={(e) => {if(e.key.toLowerCase()==="enter"){reset()}}}/>
+//                     </div>
+//                 </label>
+//             </div>
+//         </div>
+//     )
+// }
+
 
 function RandomnessOption({generationIsRandom, setGenerationIsRandom}){
+    useEffect(() => {console.log(generationIsRandom);
+    }, [generationIsRandom])
     return (
-        <div className="field-option randomness-option">
-            <span className="field-lable">Generate Random?</span>
+        <div className="option-field randomness-option">
+            <span className="field-label">Generate Random?</span>
             <div className='option-input'>
-                <label htmlFor="random-true">Yes</label><input type="radio" name="randomness" id="random-true" /><label htmlFor="random-false">No</label><input type="radio" name="randomness" id="random-false" />
+                <div className="radio-input">
+                    <label htmlFor="random-true">Yes</label>
+                    <input type="radio" name="randomness" id="random-true" checked={generationIsRandom} onChange={(e:ChangeEvent) => setGenerationIsRandom(true)}/>
+                </div>
+                <div className="radio-input">
+                    <label htmlFor="random-false">No</label>
+                    <input type="radio" name="randomness" id="random-false" onChange={(e:ChangeEvent) => setGenerationIsRandom(false)}/>
+                </div>
             </div>
         </div>
     )
@@ -86,45 +96,41 @@ interface OptionsBannerProps{
     setArraySize:Function;
     reset:Function;
     setTimePerStep:Function;
-    oneToN:boolean;
-    setOneToN:Function;
-    generationRangeMin:number;
-    generationRangeMax:number;
-    setGenerationRangeMin:Function;
-    setGenerationRangeMax:Function;
+    consecutiveGeneration:boolean;
+    setConsecutiveGeneration:Function;
     disabled:boolean;
 }
 
-export function OptionsBanner({selectedSort, selectSort, arraySize, setArraySize, oneToN, setOneToN, setTimePerStep, disabled, reset, ...props}:OptionsBannerProps){
+export function OptionsBanner({selectedSort, selectSort, arraySize, setArraySize, consecutiveGeneration, setConsecutiveGeneration, setTimePerStep, disabled, reset}:OptionsBannerProps){
     const collapseRef = useRef();
     const toggleOptionsVisibility = () => {
         const collapseList:HTMLElement = collapseRef.current;
+        collapseList.classList.add('h-fit');
+        const height = collapseList.clientHeight;
+        collapseList.style.height = `${height}px`;
+        collapseList.classList.remove('h-fit');
         if(collapseList.clientHeight){
-            hideOptions();
+            hideOptions(height);
         }
         else{
-            showOptions();
+            showOptions(height);
         }
     }
-    const hideOptions = () => {
+    const hideOptions = (height) => {
         const collapseList:HTMLElement = collapseRef.current;
-        let height = 0;
-        const collapseChildren = collapseList.children;
-        for(let i = 0; i < collapseChildren.length; i++){
-            height += collapseChildren.item(i).clientHeight;
-        }
-
-        collapseList.style.height = `${height}px`;
         collapseList.classList.remove("h-fit", "show");
         collapseList.classList.add("h-0");
     }
-    const showOptions = () => {
+    const showOptions = (height) => {
         const collapseList:HTMLElement = collapseRef.current;
         collapseList.classList.remove("h-0");
-        collapseList.classList.add('h-fit', 'show');
+        collapseList.classList.add('show');
     }
     useEffect(() => {
-        hideOptions();
+        const collapseList:HTMLElement = collapseRef.current;
+        collapseList.classList.add('h-fit');
+        const height = collapseList.clientHeight;
+        hideOptions(height);
     }, [])
 
     const algorithmDropdown = <select className="option-field" name="sort-select" id="sort-select" value={selectedSort} onChange={(e) => {selectSort(e.target.value)}} disabled={disabled}>
@@ -139,14 +145,13 @@ export function OptionsBanner({selectedSort, selectSort, arraySize, setArraySize
                 <button className="menu-btn" onClick={toggleOptionsVisibility}>
                     <img src={menuIcon} alt="" className='menu-icon' />
                 </button>
-                <div className="collapse-container" ref={collapseRef}>
+                <div className="collapse-container h-fit" ref={collapseRef}>
                     <div className={"options-list"} >
                             <ArraySizeInput arraySize={arraySize} setArraySize={setArraySize} reset={reset}/>
                             <SpeedSlider setTimePerStep={setTimePerStep}/>
-                            <ValueOptions oneToN={oneToN} setOneToN={setOneToN}
-                                generationRangeMin={props.generationRangeMin} generationRangeMax={props.generationRangeMax}
-                                setGenerationRangeMin={props.setGenerationRangeMin} setGenerationRangeMax={props.setGenerationRangeMax}
-                                reset={reset}
+                            <RandomnessOption 
+                                generationIsRandom={!consecutiveGeneration}
+                                setGenerationIsRandom={(bool:boolean) => {setConsecutiveGeneration(!bool)}}
                             />
                     </div>
                 </div>
